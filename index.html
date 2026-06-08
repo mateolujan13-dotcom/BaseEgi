@@ -1,0 +1,1524 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexoSport — Base de Datos | IRONDEV'S</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/base.css">
+<!-- Tailwind CSS via CDN (Generado por Stitch) -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          primary: "#E8FF00",
+          secondary: "#00E5FF",
+          surface: "#111118",
+          base: "#0A0A0F",
+          accent: "#1A1A24",
+          warning: "#FF8A00",
+          success: "#00FF66",
+          muted: "#7A7A95"
+        },
+        fontFamily: {
+          headline: ["Barlow Condensed", "sans-serif"],
+          display: ["Public Sans", "sans-serif"],
+          body: ["Inter", "sans-serif"],
+          mono: ["JetBrains Mono", "monospace"]
+        }
+      }
+    }
+  }
+</script>
+<!-- 2. Prism.js CSS (syntax highlighting) -->
+<!-- Custom code theme (replaces Prism okaidia) -->
+</head>
+<body class="font-body bg-[#0A0A0F] text-[#F0F0F8] selection:bg-primary selection:text-black">
+
+<!-- Capas de fondo atmosféricas -->
+<div class="bg-orb bg-orb-1" aria-hidden="true"></div>
+<div class="bg-orb bg-orb-2" aria-hidden="true"></div>
+<div class="bg-orb bg-orb-3" aria-hidden="true"></div>
+
+
+<!-- TopNavBar (Stitch) -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-[#0A0A0F]/80 backdrop-blur-md border-b border-white/10">
+  <a href="#" class="text-2xl font-black tracking-tighter text-[#E8FF00] font-headline no-underline">
+    <span>NEXO</span>SPORT <span class="text-xs text-[#00E5FF] ml-2">EGI</span>
+  </a>
+  <div class="hidden md:flex gap-8 items-center nav-links">
+    <a class="font-headline uppercase tracking-tighter font-black text-[#E8FF00] hover:text-[#F0F0F8] transition-colors" href="#equipo">Equipo</a>
+    <a class="font-headline uppercase tracking-tighter font-black text-[#7A7A95] hover:text-[#F0F0F8] transition-colors" href="#esquema">Esquema</a>
+    <a class="font-headline uppercase tracking-tighter font-black text-[#7A7A95] hover:text-[#F0F0F8] transition-colors" href="#vistas">Vistas</a>
+    <a class="font-headline uppercase tracking-tighter font-black text-[#7A7A95] hover:text-[#F0F0F8] transition-colors" href="#normalizacion">Normalización</a>
+    <a class="font-headline uppercase tracking-tighter font-black text-[#7A7A95] hover:text-[#F0F0F8] transition-colors" href="#visualizaciones">Analítica</a>
+  </div>
+</nav>
+
+<!-- Hero Section (Stitch) -->
+<section id="hero" class="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
+  <!-- Background Glows -->
+  <div class="hero-glow absolute w-[600px] h-[600px] bg-[#E8FF00] rounded-full blur-[180px] opacity-[0.06] -top-48 -left-48 pointer-events-none transform translate-z-0"></div>
+  <div class="hero-glow2 absolute w-[500px] h-[500px] bg-[#00E5FF] rounded-full blur-[180px] opacity-[0.06] -bottom-24 -right-24 pointer-events-none transform translate-z-0"></div>
+  
+  <!-- Content Container -->
+  <div class="relative z-10 w-full max-w-7xl px-6 flex flex-col items-center text-center mt-12">
+    <!-- Top Badge -->
+    <div class="hero-tag mb-8 inline-flex items-center gap-2 px-4 py-1.5 border border-[#E8FF00]/30 bg-[#E8FF00]/5 rounded-full">
+      <span class="w-2 h-2 rounded-full bg-[#E8FF00] animate-pulse"></span>
+      <span class="text-xs font-mono tracking-widest text-[#E8FF00] uppercase">ITU Mendoza · EGI · Base de Datos · 2025B</span>
+    </div>
+    
+    <!-- Titles -->
+    <h1 class="hero-title text-[12vw] md:text-[140px] leading-[0.85] font-headline font-black tracking-tighter text-[#E8FF00] mb-4 uppercase">
+      NEXOSPORT
+    </h1>
+    <div class="flex flex-col items-center gap-4">
+      <p class="font-mono text-lg md:text-2xl text-[#00E5FF] tracking-[0.2em] font-bold">
+        BASE DE DATOS — ENTREGA FINAL
+      </p>
+      <div class="min-h-[2rem] md:min-h-[2.5rem] flex items-center justify-center">
+        <p class="hero-sub font-mono text-sm md:text-base leading-relaxed" id="typewriter" style="color: #E0E0F0 !important;">
+          Sincronizando esquemas relacionales para gestión de alto rendimiento...
+        </p>
+      </div>
+    </div>
+    
+    <!-- Stats Row -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-20 w-full max-w-5xl hero-stats">
+      <div class="border border-white/10 bg-[#111118]/60 backdrop-blur-md p-6 flex flex-col items-center justify-center group hover:border-[#E8FF00]/40 transition-all rounded-sm">
+        <span class="text-[#E8FF00] font-mono text-3xl font-bold mb-1 hero-stat-num" id="counter-tablas">0</span>
+        <span class="text-[#7A7A95] font-headline uppercase tracking-widest text-[10px] group-hover:text-[#F0F0F8] transition-colors">Tablas</span>
+      </div>
+      <div class="border border-white/10 bg-[#111118]/60 backdrop-blur-md p-6 flex flex-col items-center justify-center group hover:border-[#E8FF00]/40 transition-all rounded-sm">
+        <span class="text-[#E8FF00] font-mono text-3xl font-bold mb-1 hero-stat-num" id="counter-vistas">0</span>
+        <span class="text-[#7A7A95] font-headline uppercase tracking-widest text-[10px] group-hover:text-[#F0F0F8] transition-colors">Vistas</span>
+      </div>
+      <div class="border border-white/10 bg-[#111118]/60 backdrop-blur-md p-6 flex flex-col items-center justify-center group hover:border-[#E8FF00]/40 transition-all rounded-sm">
+        <span class="text-[#E8FF00] font-mono text-3xl font-bold mb-1 hero-stat-num" id="counter-triggers">0</span>
+        <span class="text-[#7A7A95] font-headline uppercase tracking-widest text-[10px] group-hover:text-[#F0F0F8] transition-colors">Triggers</span>
+      </div>
+      <div class="border border-white/10 bg-[#111118]/60 backdrop-blur-md p-6 flex flex-col items-center justify-center group hover:border-[#E8FF00]/40 transition-all rounded-sm">
+        <span class="text-[#E8FF00] font-mono text-3xl font-bold mb-1 hero-stat-num" id="counter-procs">0</span>
+        <span class="text-[#7A7A95] font-headline uppercase tracking-widest text-[10px] group-hover:text-[#F0F0F8] transition-colors">Procedures</span>
+      </div>
+      <div class="border border-white/10 bg-[#111118]/60 backdrop-blur-md p-6 flex flex-col items-center justify-center group hover:border-[#E8FF00]/40 transition-all rounded-sm">
+        <span class="text-[#E8FF00] font-mono text-3xl font-bold mb-1 hero-stat-num">3FN</span>
+        <span class="text-[#7A7A95] font-headline uppercase tracking-widest text-[10px] group-hover:text-[#F0F0F8] transition-colors">Normalización</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-16"></div>
+
+<!-- EQUIPO -->
+<section id="equipo" class="max-w-[1600px] mx-auto px-6 py-20 relative z-10">
+  <div class="mb-12 flex flex-col items-center justify-center text-center">
+    <div class="inline-flex items-center px-3 py-1 bg-[#111118]/60 backdrop-blur-md border border-white/10 mb-6 group cursor-default font-mono text-[10px] text-[#E8FF00] tracking-widest uppercase">⬡ Integrantes</div>
+    <h2 class="text-4xl md:text-6xl font-headline font-black tracking-tighter text-[#F0F0F8] mb-4 uppercase">IRONDEV'S</h2>
+    <p class="text-[#7A7A95] max-w-2xl font-mono text-sm leading-relaxed">Equipo de desarrollo estudiantil de la Tecnicatura en Desarrollo de Software — ITU Mendoza.</p>
+  </div>
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 w-full max-w-5xl mx-auto">
+    <div class="bg-[#111118]/80 border border-white/10 p-6 rounded-md flex flex-col items-center hover:border-[#E8FF00]/40 transition-all group">
+      <div class="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center font-headline text-2xl font-bold text-[#E8FF00] mb-4 group-hover:scale-110 transition-transform">AD</div>
+      <div class="font-mono text-sm font-bold text-[#F0F0F8] mb-1 text-center">Alejandro Díaz</div>
+      <div class="text-[10px] font-bold tracking-widest uppercase text-[#7A7A95] text-center">Admin · Full Stack</div>
+    </div>
+    <div class="bg-[#111118]/80 border border-white/10 p-6 rounded-md flex flex-col items-center hover:border-[#E8FF00]/40 transition-all group">
+      <div class="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center font-headline text-2xl font-bold text-[#E8FF00] mb-4 group-hover:scale-110 transition-transform">JA</div>
+      <div class="font-mono text-sm font-bold text-[#F0F0F8] mb-1 text-center">Josué Aguirre</div>
+      <div class="text-[10px] font-bold tracking-widest uppercase text-[#7A7A95] text-center">Backend · DB</div>
+    </div>
+    <div class="bg-[#111118]/80 border border-white/10 p-6 rounded-md flex flex-col items-center hover:border-[#E8FF00]/40 transition-all group">
+      <div class="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center font-headline text-2xl font-bold text-[#E8FF00] mb-4 group-hover:scale-110 transition-transform">LM</div>
+      <div class="font-mono text-sm font-bold text-[#F0F0F8] mb-1 text-center">Leonardo Milow</div>
+      <div class="text-[10px] font-bold tracking-widest uppercase text-[#7A7A95] text-center">Backend · DB</div>
+    </div>
+    <div class="bg-[#111118]/80 border border-white/10 p-6 rounded-md flex flex-col items-center hover:border-[#E8FF00]/40 transition-all group">
+      <div class="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center font-headline text-2xl font-bold text-[#E8FF00] mb-4 group-hover:scale-110 transition-transform">ML</div>
+      <div class="font-mono text-sm font-bold text-[#F0F0F8] mb-1 text-center">Mateo Luján</div>
+      <div class="text-[10px] font-bold tracking-widest uppercase text-[#7A7A95] text-center">Backend · DB</div>
+    </div>
+    <div class="bg-[#111118]/80 border border-white/10 p-6 rounded-md flex flex-col items-center hover:border-[#E8FF00]/40 transition-all group">
+      <div class="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center font-headline text-2xl font-bold text-[#E8FF00] mb-4 group-hover:scale-110 transition-transform">RA</div>
+      <div class="font-mono text-sm font-bold text-[#F0F0F8] mb-1 text-center">Rocío Avezon</div>
+      <div class="text-[10px] font-bold tracking-widest uppercase text-[#7A7A95] text-center">Admin · Analista</div>
+    </div>
+  </div>
+</section>
+
+<div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-16"></div>
+
+<!-- ESQUEMA DE TABLAS -->
+<section id="esquema" class="max-w-[1600px] mx-auto px-6 py-20 relative z-10">
+  <div class="mb-12 flex flex-col items-center justify-center text-center">
+    <div class="inline-flex items-center px-3 py-1 bg-[#111118]/60 backdrop-blur-md border border-white/10 mb-6 group cursor-default">
+      <span class="font-mono text-[10px] text-[#E8FF00] tracking-widest uppercase">⬡ Ingeniería Inversa</span>
+      <span class="ml-2 w-1 h-1 rounded-full bg-[#E8FF00] animate-pulse"></span>
+    </div>
+    <h2 class="text-4xl md:text-6xl font-headline font-black tracking-tighter text-[#F0F0F8] mb-4 uppercase">
+      Esquema de Tablas
+    </h2>
+    <p class="text-[#7A7A95] max-w-2xl font-mono text-sm leading-relaxed">
+      Estructura de las 21 tablas de la base de datos <strong>nexosport</strong>, con sus columnas clave, tipos de datos y relaciones. Generado dinámicamente.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4" id="schema-grid-container">
+  </div>
+</section>
+
+<!-- VISTAS -->
+<section id="vistas" class="max-w-[1600px] mx-auto px-6 py-20 relative z-10">
+  <div class="mb-12 flex flex-col items-center justify-center text-center">
+    <div class="inline-flex items-center px-3 py-1 bg-[#111118]/60 backdrop-blur-md border border-white/10 mb-6 group cursor-default font-mono text-[10px] text-[#E8FF00] tracking-widest uppercase">⬡ Bloque 4 — Sección 1</div>
+    <h2 class="text-4xl md:text-6xl font-headline font-black tracking-tighter text-[#F0F0F8] mb-4 uppercase">VISTAS SQL</h2>
+    <p class="text-[#7A7A95] max-w-2xl font-mono text-sm leading-relaxed">Consultas preconstruidas que encapsulan lógica compleja de negocio. Cada vista se puede consultar directamente como si fuera una tabla.</p>
+  </div>
+
+  <div class="code-cards reveal">
+
+    <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+      <div class="flex items-center justify-between p-6 select-none">
+        <div class="flex items-center">
+          <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">01</span>
+          <div>
+            <div class="font-mono text-lg font-bold text-[#E8FF00]">catalogo_integral</div>
+            <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Estado de stock + precios mayoristas y minoristas por producto</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="px-2 py-0.5 text-[10px] font-bold tracking-tighter bg-white/10 border border-white/20 uppercase">VIEW</span>
+          <span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+        </div>
+      </div>
+      <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Tablas base</div><div class="text-white font-body text-sm leading-tight">productos, categorias, proveedores, inventario, precios_por_tipo</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Función</div><div class="text-white font-body text-sm leading-tight">Panel de catálogo con alerta automática de reposición de stock</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Caso de uso</div><div class="text-white font-body text-sm leading-tight">Dashboard de gestión de inventario y catálogo para administradores</div></div>
+        </div>
+        <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="kw">CREATE OR REPLACE VIEW</span> <span class="fn">catalogo_integral</span> <span class="kw">AS</span>
+<span class="kw">SELECT</span>
+    p.id_producto,
+    p.nombre                           <span class="kw">AS</span> producto,
+    c.nombre                           <span class="kw">AS</span> categoria,
+    prov.nombre                        <span class="kw">AS</span> proveedor,
+    p.precio_base                      <span class="kw">AS</span> precio_lista_minorista,
+    <span class="fn">COALESCE</span>(pm.precio, p.precio_base)  <span class="kw">AS</span> precio_lista_mayorista,
+    i.stock_actual,
+    i.stock_minimo,
+    <span class="kw">CASE</span>
+        <span class="kw">WHEN</span> i.stock_actual <span class="op">=</span> <span class="nm">0</span>
+            <span class="kw">THEN</span> <span class="str">'Sin Stock'</span>
+        <span class="kw">WHEN</span> i.stock_actual <span class="op">&lt;=</span> i.stock_minimo
+            <span class="kw">THEN</span> <span class="str">'Alerta Reposición'</span>
+        <span class="kw">ELSE</span> <span class="str">'Stock Óptimo'</span>
+    <span class="kw">END AS</span> estado_inventario,
+    i.ubicacion
+<span class="kw">FROM</span> productos p
+<span class="kw">INNER JOIN</span> categorias c    <span class="kw">ON</span> p.id_categoria  <span class="op">=</span> c.id_categoria
+<span class="kw">INNER JOIN</span> proveedores prov <span class="kw">ON</span> p.id_proveedor  <span class="op">=</span> prov.id_proveedor
+<span class="kw">INNER JOIN</span> inventario i    <span class="kw">ON</span> p.id_producto   <span class="op">=</span> i.id_producto
+<span class="kw">LEFT JOIN</span>  precios_por_tipo pm
+    <span class="kw">ON</span> pm.id_producto <span class="op">=</span> p.id_producto
+   <span class="kw">AND</span> pm.tipo_cliente <span class="op">=</span> <span class="str">'mayorista'</span>
+<span class="kw">WHERE</span> p.estado <span class="op">!=</span> <span class="str">'inactivo'</span>;</code></pre>
+      </div>
+    </div>
+
+    <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+      <div class="flex items-center justify-between p-6 select-none">
+        <div class="flex items-center">
+          <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">02</span>
+          <div>
+            <div class="font-mono text-lg font-bold text-[#E8FF00]">trazabilidad_logistica</div>
+            <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Seguimiento en tiempo real del estado de envíos por pedido</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="px-2 py-0.5 text-[10px] font-bold tracking-tighter bg-white/10 border border-white/20 uppercase">VIEW</span>
+          <span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+        </div>
+      </div>
+      <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Tablas base</div><div class="text-white font-body text-sm leading-tight">seguimiento_envios, pedidos, empresas_transporte, clientes, usuarios, pagos</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Función</div><div class="text-white font-body text-sm leading-tight">Mapa logístico completo: tracking, transportista, destino y estado de pago</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Caso de uso</div><div class="text-white font-body text-sm leading-tight">Panel de operaciones para seguimiento activo de despachos</div></div>
+        </div>
+        <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="kw">CREATE OR REPLACE VIEW</span> <span class="fn">trazabilidad_logistica</span> <span class="kw">AS</span>
+<span class="kw">SELECT</span>
+    ped.numero_pedido,
+    ped.fecha                          <span class="kw">AS</span> fecha_compra,
+    <span class="fn">CONCAT</span>(u.nombre, <span class="str">' '</span>, u.apellido)  <span class="kw">AS</span> cliente_final,
+    cl.provincia                       <span class="kw">AS</span> destino_provincia,
+    emp.nombre                         <span class="kw">AS</span> empresa_transporte,
+    seg.codigo_tracking,
+    seg.estado_envio,
+    seg.fecha_actualizacion            <span class="kw">AS</span> ultima_novedad_logistica,
+    pag.estado                         <span class="kw">AS</span> estado_pago,
+    ped.metodo_envio
+<span class="kw">FROM</span> seguimiento_envios seg
+<span class="kw">INNER JOIN</span> pedidos ped              <span class="kw">ON</span> seg.id_pedido  <span class="op">=</span> ped.id_pedido
+<span class="kw">INNER JOIN</span> empresas_transporte emp  <span class="kw">ON</span> seg.id_empresa <span class="op">=</span> emp.id_empresa
+<span class="kw">INNER JOIN</span> clientes cl              <span class="kw">ON</span> ped.id_cliente <span class="op">=</span> cl.id_cliente
+<span class="kw">INNER JOIN</span> usuarios u               <span class="kw">ON</span> cl.id_cliente  <span class="op">=</span> u.id_usuario
+<span class="kw">LEFT JOIN</span>  pagos pag                <span class="kw">ON</span> pag.id_pedido  <span class="op">=</span> ped.id_pedido
+<span class="kw">ORDER BY</span> seg.fecha_actualizacion <span class="kw">DESC</span>;</code></pre>
+      </div>
+    </div>
+
+    <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+      <div class="flex items-center justify-between p-6 select-none">
+        <div class="flex items-center">
+          <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">03</span>
+          <div>
+            <div class="font-mono text-lg font-bold text-[#E8FF00]">analisis_cupones_clientes</div>
+            <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Impacto financiero de cada cupón: redenciones, descuento e ingresos netos</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="px-2 py-0.5 text-[10px] font-bold tracking-tighter bg-white/10 border border-white/20 uppercase">VIEW</span>
+          <span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+        </div>
+      </div>
+      <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Tablas base</div><div class="text-white font-body text-sm leading-tight">cupones_descuento, uso_cupones, pedidos, clientes</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Función</div><div class="text-white font-body text-sm leading-tight">Análisis de rentabilidad por campaña promocional con agrupación por tipo de cliente</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Caso de uso</div><div class="text-white font-body text-sm leading-tight">Reporte de marketing para evaluar la efectividad de los cupones</div></div>
+        </div>
+        <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="kw">CREATE OR REPLACE VIEW</span> <span class="fn">analisis_cupones_clientes</span> <span class="kw">AS</span>
+<span class="kw">SELECT</span>
+    cup.codigo_promocional,
+    cup.porcentaje_descuento,
+    cup.estado                          <span class="kw">AS</span> estado_cupon,
+    cl.tipo_cliente,
+    <span class="fn">COUNT</span>(uso.id_uso)                   <span class="kw">AS</span> cantidad_redenciones,
+    <span class="fn">COALESCE</span>(<span class="fn">SUM</span>(ped.subtotal), <span class="nm">0</span>)    <span class="kw">AS</span> total_ventas_brutas,
+    <span class="fn">COALESCE</span>(<span class="fn">SUM</span>(ped.descuento), <span class="nm">0</span>)   <span class="kw">AS</span> capital_descontado,
+    <span class="fn">COALESCE</span>(<span class="fn">SUM</span>(ped.total), <span class="nm">0</span>)       <span class="kw">AS</span> ingresos_netos_generados
+<span class="kw">FROM</span> cupones_descuento cup
+<span class="kw">LEFT JOIN</span> uso_cupones uso <span class="kw">ON</span> cup.id_cupon  <span class="op">=</span> uso.id_cupon
+<span class="kw">LEFT JOIN</span> pedidos ped     <span class="kw">ON</span> uso.id_pedido <span class="op">=</span> ped.id_pedido
+<span class="kw">LEFT JOIN</span> clientes cl     <span class="kw">ON</span> uso.id_cliente<span class="op">=</span> cl.id_cliente
+<span class="kw">GROUP BY</span>
+    cup.id_cupon, cup.codigo_promocional,
+    cup.porcentaje_descuento, cup.estado, cl.tipo_cliente
+<span class="kw">ORDER BY</span> cantidad_redenciones <span class="kw">DESC</span>;</code></pre>
+      </div>
+    </div>
+
+    <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+      <div class="flex items-center justify-between p-6 select-none">
+        <div class="flex items-center">
+          <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">04</span>
+          <div>
+            <div class="font-mono text-lg font-bold text-[#E8FF00]">desempeno_comercial_productos</div>
+            <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Ranking de productos por ingresos, unidades vendidas y rating de opiniones</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="px-2 py-0.5 text-[10px] font-bold tracking-tighter bg-white/10 border border-white/20 uppercase">VIEW</span>
+          <span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+        </div>
+      </div>
+      <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Tablas base</div><div class="text-white font-body text-sm leading-tight">productos, categorias, proveedores, detalle_pedido, pedidos, opiniones</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Función</div><div class="text-white font-body text-sm leading-tight">KPIs comerciales por producto: ingresos totales, presencia en pedidos y satisfacción promedio</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Caso de uso</div><div class="text-white font-body text-sm leading-tight">Informe ejecutivo de ventas y desempeño del catálogo</div></div>
+        </div>
+        <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="kw">CREATE OR REPLACE VIEW</span> <span class="fn">desempeno_comercial_productos</span> <span class="kw">AS</span>
+<span class="kw">SELECT</span>
+    p.id_producto,
+    p.nombre                             <span class="kw">AS</span> producto,
+    p.marca,
+    c.nombre                             <span class="kw">AS</span> categoria,
+    prov.nombre                          <span class="kw">AS</span> proveedor,
+    <span class="fn">COALESCE</span>(<span class="fn">SUM</span>(dp.cantidad), <span class="nm">0</span>)      <span class="kw">AS</span> total_unidades_vendidas,
+    <span class="fn">COALESCE</span>(<span class="fn">SUM</span>(dp.subtotal), <span class="nm">0</span>)      <span class="kw">AS</span> ingresos_totales,
+    <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> ped.id_pedido)        <span class="kw">AS</span> presencia_en_pedidos,
+    <span class="fn">ROUND</span>(<span class="fn">AVG</span>(o.calificacion), <span class="nm">2</span>)        <span class="kw">AS</span> rating_satisfaccion
+<span class="kw">FROM</span> productos p
+<span class="kw">INNER JOIN</span> categorias c      <span class="kw">ON</span> c.id_categoria   <span class="op">=</span> p.id_categoria
+<span class="kw">LEFT JOIN</span>  proveedores prov  <span class="kw">ON</span> prov.id_proveedor <span class="op">=</span> p.id_proveedor
+<span class="kw">LEFT JOIN</span>  detalle_pedido dp <span class="kw">ON</span> dp.id_producto    <span class="op">=</span> p.id_producto
+<span class="kw">LEFT JOIN</span>  pedidos ped       <span class="kw">ON</span> ped.id_pedido     <span class="op">=</span> dp.id_pedido
+    <span class="kw">AND</span> ped.estado <span class="kw">IN</span> (<span class="str">'confirmado'</span>,<span class="str">'en_preparacion'</span>,<span class="str">'enviado'</span>,<span class="str">'entregado'</span>)
+<span class="kw">LEFT JOIN</span>  opiniones o       <span class="kw">ON</span> o.id_producto     <span class="op">=</span> p.id_producto
+    <span class="kw">AND</span> o.estado <span class="op">=</span> <span class="str">'visible'</span>
+<span class="kw">GROUP BY</span>   p.id_producto, p.nombre, p.marca, c.nombre, prov.nombre
+<span class="kw">ORDER BY</span>   ingresos_totales <span class="kw">DESC</span>;</code></pre>
+      </div>
+    </div>
+
+    <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+      <div class="flex items-center justify-between p-6 select-none">
+        <div class="flex items-center">
+          <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">05</span>
+          <div>
+            <div class="font-mono text-lg font-bold text-[#E8FF00]">panel_financiero_ctacte</div>
+            <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Estado crediticio de clientes mayoristas con saldo histórico y nivel de riesgo</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="px-2 py-0.5 text-[10px] font-bold tracking-tighter bg-white/10 border border-white/20 uppercase">VIEW</span>
+          <span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+        </div>
+      </div>
+      <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Técnica avanzada</div><div class="text-white font-body text-sm leading-tight">CTE + Window Function (ROW_NUMBER OVER PARTITION BY)</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Función</div><div class="text-white font-body text-sm leading-tight">Semáforo financiero: deuda actual, margen disponible y clasificación de riesgo crediticio</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Caso de uso</div><div class="text-white font-body text-sm leading-tight">Control de crédito para clientes mayoristas habilitados</div></div>
+        </div>
+        <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="kw">CREATE OR REPLACE VIEW</span> <span class="fn">panel_financiero_ctacte</span> <span class="kw">AS</span>
+<span class="kw">WITH</span> SaldosHistoricos <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        id_cliente, saldo_posterior, fecha,
+        <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span>(
+            <span class="kw">PARTITION BY</span> id_cliente
+            <span class="kw">ORDER BY</span> fecha <span class="kw">DESC</span>, id_movimiento <span class="kw">DESC</span>
+        ) <span class="kw">AS</span> fila
+    <span class="kw">FROM</span> cuenta_corriente
+)
+<span class="kw">SELECT</span>
+    cl.id_cliente,
+    cl.razon_social,
+    cl.cuit,
+    <span class="fn">CONCAT</span>(u.nombre, <span class="str">' '</span>, u.apellido)    <span class="kw">AS</span> representante,
+    cl.limite_credito                    <span class="kw">AS</span> credito_maximo_otorgado,
+    <span class="fn">COALESCE</span>(sh.saldo_posterior, <span class="nm">0</span>)     <span class="kw">AS</span> deuda_actual_exigible,
+    (cl.limite_credito <span class="op">-</span> <span class="fn">COALESCE</span>(sh.saldo_posterior, <span class="nm">0</span>))
+                                         <span class="kw">AS</span> margen_disponible,
+    <span class="kw">CASE</span>
+        <span class="kw">WHEN</span> <span class="fn">COALESCE</span>(sh.saldo_posterior,<span class="nm">0</span>) <span class="op">&gt;=</span> (cl.limite_credito <span class="op">*</span> <span class="nm">0.9</span>)
+            <span class="kw">THEN</span> <span class="str">'Riesgo Alto (Límite casi alcanzado)'</span>
+        <span class="kw">WHEN</span> <span class="fn">COALESCE</span>(sh.saldo_posterior,<span class="nm">0</span>) <span class="op">&gt;=</span> (cl.limite_credito <span class="op">*</span> <span class="nm">0.5</span>)
+            <span class="kw">THEN</span> <span class="str">'Riesgo Medio'</span>
+        <span class="kw">ELSE</span> <span class="str">'Línea de Crédito Saludable'</span>
+    <span class="kw">END AS</span> estado_crediticio
+<span class="kw">FROM</span> clientes cl
+<span class="kw">INNER JOIN</span> usuarios u          <span class="kw">ON</span> u.id_usuario  <span class="op">=</span> cl.id_cliente
+<span class="kw">LEFT JOIN</span>  SaldosHistoricos sh <span class="kw">ON</span> sh.id_cliente <span class="op">=</span> cl.id_cliente <span class="kw">AND</span> sh.fila <span class="op">=</span> <span class="nm">1</span>
+<span class="kw">WHERE</span> cl.tipo_cliente <span class="op">=</span> <span class="str">'mayorista'</span>;</code></pre>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-16"></div>
+
+<!-- TRIGGERS -->
+<section id="triggers" class="max-w-[1600px] mx-auto px-6 py-20 relative z-10">
+  <div class="mb-12 flex flex-col items-center justify-center text-center">
+    <div class="inline-flex items-center px-3 py-1 bg-[#111118]/60 backdrop-blur-md border border-white/10 mb-6 group cursor-default font-mono text-[10px] text-[#E8FF00] tracking-widest uppercase">⬡ Bloque 4 — Sección 2</div>
+    <h2 class="text-4xl md:text-6xl font-headline font-black tracking-tighter text-[#F0F0F8] mb-4 uppercase">TRIGGERS</h2>
+    <p class="text-[#7A7A95] max-w-2xl font-mono text-sm leading-relaxed">Procedimientos automáticos disparados por eventos DML. Garantizan integridad de datos sin depender de la lógica de la aplicación.</p>
+  </div>
+
+  <div class="code-cards reveal">
+
+    <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+      <div class="flex items-center justify-between p-6 select-none">
+        <div class="flex items-center">
+          <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">01</span>
+          <div>
+            <div class="font-mono text-lg font-bold text-[#E8FF00]">validacion_detalle_pedido</div>
+            <div class="text-[#7A7A95] text-xs max-w-xl mt-1">BEFORE INSERT — Valida stock e impide vender productos inactivos</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="code-tag blue">BEFORE INSERT</span>
+          <span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+        </div>
+      </div>
+      <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Tabla objetivo</div><div class="text-white font-body text-sm leading-tight">detalle_pedido</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Tipo</div><div class="text-white font-body text-sm leading-tight">BEFORE INSERT · FOR EACH ROW</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Protección</div><div class="text-white font-body text-sm leading-tight">Rechaza filas con stock insuficiente o estado inactivo. Calcula subtotal automáticamente.</div></div>
+        </div>
+        <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="kw">CREATE TRIGGER</span> <span class="fn">validacion_detalle_pedido</span>
+<span class="kw">BEFORE INSERT ON</span> detalle_pedido
+<span class="kw">FOR EACH ROW</span>
+<span class="kw">BEGIN</span>
+    <span class="kw">DECLARE</span> v_estado_producto <span class="dt">VARCHAR</span>(<span class="nm">20</span>);
+    <span class="kw">DECLARE</span> v_stock_disponible <span class="dt">INT</span>;
+
+    <span class="kw">SELECT</span> estado        <span class="kw">INTO</span> v_estado_producto
+    <span class="kw">FROM</span> productos       <span class="kw">WHERE</span> id_producto <span class="op">=</span> NEW.id_producto;
+
+    <span class="kw">SELECT</span> stock_actual   <span class="kw">INTO</span> v_stock_disponible
+    <span class="kw">FROM</span> inventario      <span class="kw">WHERE</span> id_producto <span class="op">=</span> NEW.id_producto;
+
+    <span class="kw">IF</span> v_estado_producto <span class="op">=</span> <span class="str">'inactivo'</span> <span class="kw">THEN</span>
+        <span class="op">SIGNAL SQLSTATE</span> <span class="str">'45000'</span>
+            <span class="kw">SET</span> MESSAGE_TEXT <span class="op">=</span> <span class="str">'No se puede vender un producto inactivo.'</span>;
+    <span class="kw">END IF</span>;
+
+    <span class="kw">IF</span> v_stock_disponible <span class="op">&lt;</span> NEW.cantidad <span class="kw">THEN</span>
+        <span class="op">SIGNAL SQLSTATE</span> <span class="str">'45000'</span>
+            <span class="kw">SET</span> MESSAGE_TEXT <span class="op">=</span> <span class="str">'Inventario insuficiente para la cantidad solicitada.'</span>;
+    <span class="kw">END IF</span>;
+
+    <span class="kw">SET</span> NEW.subtotal <span class="op">=</span> NEW.cantidad <span class="op">*</span> NEW.precio_unitario;
+<span class="kw">END</span>$$</code></pre>
+      </div>
+    </div>
+
+    <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+      <div class="flex items-center justify-between p-6 select-none">
+        <div class="flex items-center">
+          <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">02</span>
+          <div>
+            <div class="font-mono text-lg font-bold text-[#E8FF00]">descontar_stock_venta_estricto</div>
+            <div class="text-[#7A7A95] text-xs max-w-xl mt-1">AFTER INSERT — Descuenta stock y registra movimiento automáticamente</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="code-tag green">AFTER INSERT</span>
+          <span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+        </div>
+      </div>
+      <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Tabla objetivo</div><div class="text-white font-body text-sm leading-tight">detalle_pedido</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Tipo</div><div class="text-white font-body text-sm leading-tight">AFTER INSERT · FOR EACH ROW</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Automatización</div><div class="text-white font-body text-sm leading-tight">Actualiza inventario y genera entrada en movimientos_stock con referencia al pedido</div></div>
+        </div>
+        <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="kw">CREATE TRIGGER</span> <span class="fn">descontar_stock_venta_estricto</span>
+<span class="kw">AFTER INSERT ON</span> detalle_pedido
+<span class="kw">FOR EACH ROW</span>
+<span class="kw">BEGIN</span>
+    <span class="kw">DECLARE</span> v_stock_anterior  <span class="dt">INT</span>;
+    <span class="kw">DECLARE</span> v_stock_posterior <span class="dt">INT</span>;
+    <span class="kw">DECLARE</span> v_id_cliente      <span class="dt">INT</span>;
+    <span class="kw">DECLARE</span> v_numero_pedido   <span class="dt">VARCHAR</span>(<span class="nm">30</span>);
+
+    <span class="kw">SELECT</span> stock_actual <span class="kw">INTO</span> v_stock_anterior
+    <span class="kw">FROM</span> inventario <span class="kw">WHERE</span> id_producto <span class="op">=</span> NEW.id_producto;
+
+    <span class="kw">SET</span> v_stock_posterior <span class="op">=</span> v_stock_anterior <span class="op">-</span> NEW.cantidad;
+
+    <span class="kw">UPDATE</span> inventario <span class="kw">SET</span> stock_actual <span class="op">=</span> v_stock_posterior
+    <span class="kw">WHERE</span> id_producto <span class="op">=</span> NEW.id_producto;
+
+    <span class="kw">SELECT</span> id_cliente, numero_pedido
+    <span class="kw">INTO</span>  v_id_cliente, v_numero_pedido
+    <span class="kw">FROM</span>  pedidos <span class="kw">WHERE</span> id_pedido <span class="op">=</span> NEW.id_pedido;
+
+    <span class="kw">INSERT INTO</span> movimientos_stock (
+        id_producto, tipo_movimiento, cantidad,
+        stock_anterior, stock_posterior, referencia, id_usuario
+    ) <span class="kw">VALUES</span> (
+        NEW.id_producto, <span class="str">'salida_venta'</span>, NEW.cantidad,
+        v_stock_anterior, v_stock_posterior,
+        <span class="fn">CONCAT</span>(<span class="str">'Salida automática - Pedido N° '</span>, v_numero_pedido),
+        v_id_cliente
+    );
+<span class="kw">END</span>$$</code></pre>
+      </div>
+    </div>
+
+    <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+      <div class="flex items-center justify-between p-6 select-none">
+        <div class="flex items-center">
+          <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">03</span>
+          <div>
+            <div class="font-mono text-lg font-bold text-[#E8FF00]">control_estado_por_stock</div>
+            <div class="text-[#7A7A95] text-xs max-w-xl mt-1">AFTER UPDATE — Cambia el estado del producto a "agotado" si el stock llega a 0</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="code-tag red">AFTER UPDATE</span>
+          <span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+        </div>
+      </div>
+      <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Tabla objetivo</div><div class="text-white font-body text-sm leading-tight">inventario</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Tipo</div><div class="text-white font-body text-sm leading-tight">AFTER UPDATE · FOR EACH ROW</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Lógica</div><div class="text-white font-body text-sm leading-tight">Bidireccional: marca como "agotado" si stock = 0, y restaura "activo" si se repone</div></div>
+        </div>
+        <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="kw">CREATE TRIGGER</span> <span class="fn">control_estado_por_stock</span>
+<span class="kw">AFTER UPDATE ON</span> inventario
+<span class="kw">FOR EACH ROW</span>
+<span class="kw">BEGIN</span>
+    <span class="kw">DECLARE</span> v_estado_actual <span class="dt">VARCHAR</span>(<span class="nm">20</span>);
+    <span class="kw">SELECT</span> estado <span class="kw">INTO</span> v_estado_actual
+    <span class="kw">FROM</span> productos <span class="kw">WHERE</span> id_producto <span class="op">=</span> NEW.id_producto;
+
+    <span class="cm">-- Si queda sin stock y estaba activo â†’ agotado</span>
+    <span class="kw">IF</span> NEW.stock_actual <span class="op">&lt;=</span> <span class="nm">0</span> <span class="kw">AND</span> v_estado_actual <span class="op">=</span> <span class="str">'activo'</span> <span class="kw">THEN</span>
+        <span class="kw">UPDATE</span> productos <span class="kw">SET</span> estado <span class="op">=</span> <span class="str">'agotado'</span>
+        <span class="kw">WHERE</span> id_producto <span class="op">=</span> NEW.id_producto;
+    <span class="kw">END IF</span>;
+
+    <span class="cm">-- Si vuelve a tener stock y estaba agotado â†’ activo</span>
+    <span class="kw">IF</span> NEW.stock_actual <span class="op">&gt;</span> <span class="nm">0</span> <span class="kw">AND</span> v_estado_actual <span class="op">=</span> <span class="str">'agotado'</span> <span class="kw">THEN</span>
+        <span class="kw">UPDATE</span> productos <span class="kw">SET</span> estado <span class="op">=</span> <span class="str">'activo'</span>
+        <span class="kw">WHERE</span> id_producto <span class="op">=</span> NEW.id_producto;
+    <span class="kw">END IF</span>;
+<span class="kw">END</span>$$</code></pre>
+      </div>
+    </div>
+
+    <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+      <div class="flex items-center justify-between p-6 select-none">
+        <div class="flex items-center">
+          <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">04</span>
+          <div>
+            <div class="font-mono text-lg font-bold text-[#E8FF00]">sincronizacion_logistica_pedidos</div>
+            <div class="text-[#7A7A95] text-xs max-w-xl mt-1">AFTER UPDATE — Sincroniza el estado del pedido cuando cambia el estado del envío</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="code-tag red">AFTER UPDATE</span>
+          <span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+        </div>
+      </div>
+      <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Tabla objetivo</div><div class="text-white font-body text-sm leading-tight">seguimiento_envios</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Tipo</div><div class="text-white font-body text-sm leading-tight">AFTER UPDATE · FOR EACH ROW</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Integración</div><div class="text-white font-body text-sm leading-tight">Propaga automáticamente los cambios logísticos al estado del pedido en la tabla pedidos</div></div>
+        </div>
+        <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="kw">CREATE TRIGGER</span> <span class="fn">sincronizacion_logistica_pedidos</span>
+<span class="kw">AFTER UPDATE ON</span> seguimiento_envios
+<span class="kw">FOR EACH ROW</span>
+<span class="kw">BEGIN</span>
+    <span class="cm">-- Si el envío se marcó como entregado â†’ el pedido también</span>
+    <span class="kw">IF</span>  NEW.estado_envio <span class="op">=</span> <span class="str">'entregado'</span>
+    <span class="kw">AND</span> OLD.estado_envio <span class="op">!=</span> <span class="str">'entregado'</span> <span class="kw">THEN</span>
+        <span class="kw">UPDATE</span> pedidos <span class="kw">SET</span> estado <span class="op">=</span> <span class="str">'entregado'</span>
+        <span class="kw">WHERE</span> id_pedido <span class="op">=</span> NEW.id_pedido;
+    <span class="kw">END IF</span>;
+
+    <span class="cm">-- Si el envío fue despachado â†’ el pedido pasa a "enviado"</span>
+    <span class="kw">IF</span>  NEW.estado_envio <span class="op">=</span> <span class="str">'despachado'</span>
+    <span class="kw">AND</span> OLD.estado_envio <span class="op">!=</span> <span class="str">'despachado'</span> <span class="kw">THEN</span>
+        <span class="kw">UPDATE</span> pedidos <span class="kw">SET</span> estado <span class="op">=</span> <span class="str">'enviado'</span>
+        <span class="kw">WHERE</span> id_pedido <span class="op">=</span> NEW.id_pedido;
+    <span class="kw">END IF</span>;
+<span class="kw">END</span>$$</code></pre>
+      </div>
+    </div>
+
+    <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+      <div class="flex items-center justify-between p-6 select-none">
+        <div class="flex items-center">
+          <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">05</span>
+          <div>
+            <div class="font-mono text-lg font-bold text-[#E8FF00]">validacion_items_carrito</div>
+            <div class="text-[#7A7A95] text-xs max-w-xl mt-1">BEFORE INSERT — Bloquea ítems en carritos inactivos o con stock insuficiente</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="code-tag blue">BEFORE INSERT</span>
+          <span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+        </div>
+      </div>
+      <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Tabla objetivo</div><div class="text-white font-body text-sm leading-tight">items_carrito</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Tipo</div><div class="text-white font-body text-sm leading-tight">BEFORE INSERT · FOR EACH ROW</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Protección</div><div class="text-white font-body text-sm leading-tight">Doble validación: estado del carrito + stock físico disponible antes de agregar ítems</div></div>
+        </div>
+        <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="kw">CREATE TRIGGER</span> <span class="fn">validacion_items_carrito</span>
+<span class="kw">BEFORE INSERT ON</span> items_carrito
+<span class="kw">FOR EACH ROW</span>
+<span class="kw">BEGIN</span>
+    <span class="kw">DECLARE</span> v_estado_carrito <span class="dt">VARCHAR</span>(<span class="nm">20</span>);
+    <span class="kw">DECLARE</span> v_stock_real     <span class="dt">INT</span>;
+
+    <span class="kw">SELECT</span> estado      <span class="kw">INTO</span> v_estado_carrito
+    <span class="kw">FROM</span>  carritos     <span class="kw">WHERE</span> id_carrito <span class="op">=</span> NEW.id_carrito;
+
+    <span class="kw">SELECT</span> stock_actual <span class="kw">INTO</span> v_stock_real
+    <span class="kw">FROM</span>  inventario   <span class="kw">WHERE</span> id_producto <span class="op">=</span> NEW.id_producto;
+
+    <span class="kw">IF</span> v_estado_carrito <span class="op">!=</span> <span class="str">'activo'</span> <span class="kw">THEN</span>
+        <span class="op">SIGNAL SQLSTATE</span> <span class="str">'45000'</span> <span class="kw">SET</span> MESSAGE_TEXT <span class="op">=</span>
+            <span class="str">'Solo se pueden agregar ítems a un carrito activo.'</span>;
+    <span class="kw">END IF</span>;
+
+    <span class="kw">IF</span> v_stock_real <span class="op">&lt;</span> NEW.cantidad <span class="kw">THEN</span>
+        <span class="op">SIGNAL SQLSTATE</span> <span class="str">'45000'</span> <span class="kw">SET</span> MESSAGE_TEXT <span class="op">=</span>
+            <span class="str">'La cantidad supera el stock físico disponible.'</span>;
+    <span class="kw">END IF</span>;
+<span class="kw">END</span>$$</code></pre>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-16"></div>
+
+<!-- STORED PROCEDURES -->
+<section id="procedures" class="max-w-[1600px] mx-auto px-6 py-20 relative z-10">
+  <div class="mb-12 flex flex-col items-center justify-center text-center">
+    <div class="inline-flex items-center px-3 py-1 bg-[#111118]/60 backdrop-blur-md border border-white/10 mb-6 group cursor-default font-mono text-[10px] text-[#E8FF00] tracking-widest uppercase">⬡ Bloque 4 — Sección 3</div>
+    <h2 class="text-4xl md:text-6xl font-headline font-black tracking-tighter text-[#F0F0F8] mb-4 uppercase">STORED PROCEDURES</h2>
+    <p class="text-[#7A7A95] max-w-2xl font-mono text-sm leading-relaxed">Rutinas almacenadas con lógica de negocio transaccional compleja, manejo de errores con ROLLBACK y validaciones multicapa.</p>
+  </div>
+
+  <div class="code-cards reveal">
+
+    <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+      <div class="flex items-center justify-between p-6 select-none">
+        <div class="flex items-center">
+          <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">01</span>
+          <div>
+            <div class="font-mono text-lg font-bold text-[#E8FF00]">registrar_entrada_mercaderia</div>
+            <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Ingresa stock con transacción, valida proveedor y registra movimiento</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="code-tag green">TRANSACCIÓN</span>
+          <span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+        </div>
+      </div>
+      <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Parámetros IN</div><div class="text-white font-body text-sm leading-tight">p_id_producto, p_cantidad, p_id_proveedor, p_id_usuario, p_referencia_remito</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Lógica</div><div class="text-white font-body text-sm leading-tight">START TRANSACTION · UPDATE inventario · INSERT movimientos_stock · COMMIT / ROLLBACK</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Validaciones</div><div class="text-white font-body text-sm leading-tight">Cantidad > 0 · El producto debe pertenecer al proveedor indicado</div></div>
+        </div>
+        <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="kw">CREATE PROCEDURE</span> <span class="fn">registrar_entrada_mercaderia</span>(
+    <span class="kw">IN</span> p_id_producto       <span class="dt">INT</span>,
+    <span class="kw">IN</span> p_cantidad          <span class="dt">INT</span>,
+    <span class="kw">IN</span> p_id_proveedor      <span class="dt">INT</span>,
+    <span class="kw">IN</span> p_id_usuario        <span class="dt">INT</span>,
+    <span class="kw">IN</span> p_referencia_remito <span class="dt">TEXT</span>
+)
+<span class="kw">BEGIN</span>
+    <span class="kw">DECLARE</span> v_stock_ant  <span class="dt">INT</span>;
+    <span class="kw">DECLARE</span> v_stock_post <span class="dt">INT</span>;
+    <span class="kw">DECLARE</span> v_existe     <span class="dt">INT</span>;
+
+    <span class="kw">DECLARE EXIT HANDLER FOR SQLEXCEPTION</span>
+    <span class="kw">BEGIN</span> <span class="fn">ROLLBACK</span>; <span class="op">SIGNAL SQLSTATE</span> <span class="str">'45000'</span>
+        <span class="kw">SET</span> MESSAGE_TEXT <span class="op">=</span> <span class="str">'Error. Transacción revertida.'</span>;
+    <span class="kw">END</span>;
+
+    <span class="kw">IF</span> p_cantidad <span class="op">&lt;=</span> <span class="nm">0</span> <span class="kw">THEN</span>
+        <span class="op">SIGNAL SQLSTATE</span> <span class="str">'45000'</span>
+            <span class="kw">SET</span> MESSAGE_TEXT <span class="op">=</span> <span class="str">'La cantidad debe ser positiva.'</span>;
+    <span class="kw">END IF</span>;
+
+    <span class="kw">SELECT COUNT</span>(*) <span class="kw">INTO</span> v_existe
+    <span class="kw">FROM</span> productos
+    <span class="kw">WHERE</span> id_producto <span class="op">=</span> p_id_producto <span class="kw">AND</span> id_proveedor <span class="op">=</span> p_id_proveedor;
+
+    <span class="kw">IF</span> v_existe <span class="op">=</span> <span class="nm">0</span> <span class="kw">THEN</span>
+        <span class="op">SIGNAL SQLSTATE</span> <span class="str">'45000'</span>
+            <span class="kw">SET</span> MESSAGE_TEXT <span class="op">=</span> <span class="str">'El producto no pertenece al proveedor indicado.'</span>;
+    <span class="kw">END IF</span>;
+
+    <span class="fn">START TRANSACTION</span>;
+    <span class="kw">SELECT</span> stock_actual <span class="kw">INTO</span> v_stock_ant
+    <span class="kw">FROM</span>  inventario <span class="kw">WHERE</span> id_producto <span class="op">=</span> p_id_producto <span class="kw">FOR UPDATE</span>;
+
+    <span class="kw">SET</span> v_stock_post <span class="op">=</span> v_stock_ant <span class="op">+</span> p_cantidad;
+
+    <span class="kw">UPDATE</span> inventario <span class="kw">SET</span> stock_actual <span class="op">=</span> v_stock_post
+    <span class="kw">WHERE</span> id_producto <span class="op">=</span> p_id_producto;
+
+    <span class="kw">INSERT INTO</span> movimientos_stock
+        (id_producto, tipo_movimiento, cantidad,
+         stock_anterior, stock_posterior, referencia, id_usuario)
+    <span class="kw">VALUES</span>
+        (p_id_producto, <span class="str">'entrada'</span>, p_cantidad,
+         v_stock_ant, v_stock_post, p_referencia_remito, p_id_usuario);
+
+    <span class="fn">COMMIT</span>;
+<span class="kw">END</span>$$</code></pre>
+      </div>
+    </div>
+
+    <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+      <div class="flex items-center justify-between p-6 select-none">
+        <div class="flex items-center">
+          <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">02</span>
+          <div>
+            <div class="font-mono text-lg font-bold text-[#E8FF00]">aplicar_cupon_promocional</div>
+            <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Valida y aplica un cupón a un pedido, controlando uso previo del cliente</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="code-tag green">TRANSACCIÓN</span>
+          <span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+        </div>
+      </div>
+      <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Parámetros IN</div><div class="text-white font-body text-sm leading-tight">p_id_pedido, p_codigo, p_id_cliente</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Lógica</div><div class="text-white font-body text-sm leading-tight">Verifica vigencia del cupón · Chequea uso previo del cliente · Calcula y aplica descuento</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Cálculo</div><div class="text-white font-body text-sm leading-tight">descuento = ROUND(subtotal * porcentaje / 100, 2) · total = subtotal - descuento</div></div>
+        </div>
+        <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="kw">CREATE PROCEDURE</span> <span class="fn">aplicar_cupon_promocional</span>(
+    <span class="kw">IN</span> p_id_pedido <span class="dt">INT</span>,
+    <span class="kw">IN</span> p_codigo    <span class="dt">VARCHAR</span>(<span class="nm">50</span>),
+    <span class="kw">IN</span> p_id_cliente <span class="dt">INT</span>
+)
+<span class="kw">BEGIN</span>
+    <span class="kw">DECLARE</span> v_id_cupon    <span class="dt">INT</span>;
+    <span class="kw">DECLARE</span> v_porcentaje  <span class="dt">DECIMAL</span>(<span class="nm">5</span>,<span class="nm">2</span>);
+    <span class="kw">DECLARE</span> v_subtotal    <span class="dt">DECIMAL</span>(<span class="nm">12</span>,<span class="nm">2</span>);
+    <span class="kw">DECLARE</span> v_descuento   <span class="dt">DECIMAL</span>(<span class="nm">12</span>,<span class="nm">2</span>);
+    <span class="kw">DECLARE</span> v_usos_previos <span class="dt">INT</span>;
+
+    <span class="kw">SELECT</span> id_cupon, porcentaje_descuento
+    <span class="kw">INTO</span>  v_id_cupon, v_porcentaje
+    <span class="kw">FROM</span>  cupones_descuento
+    <span class="kw">WHERE</span> codigo_promocional <span class="op">=</span> p_codigo
+      <span class="kw">AND</span> estado <span class="op">=</span> <span class="str">'activo'</span>
+      <span class="kw">AND</span> fecha_vencimiento <span class="op">&gt;=</span> <span class="fn">CURRENT_DATE</span>;
+
+    <span class="kw">IF</span> v_id_cupon <span class="kw">IS NULL</span> <span class="kw">THEN</span>
+        <span class="op">SIGNAL SQLSTATE</span> <span class="str">'45000'</span>
+            <span class="kw">SET</span> MESSAGE_TEXT <span class="op">=</span> <span class="str">'Cupón inválido, inactivo o vencido.'</span>;
+    <span class="kw">END IF</span>;
+
+    <span class="kw">SELECT COUNT</span>(*) <span class="kw">INTO</span> v_usos_previos
+    <span class="kw">FROM</span> uso_cupones
+    <span class="kw">WHERE</span> id_cupon <span class="op">=</span> v_id_cupon <span class="kw">AND</span> id_cliente <span class="op">=</span> p_id_cliente;
+
+    <span class="kw">IF</span> v_usos_previos <span class="op">&gt;</span> <span class="nm">0</span> <span class="kw">THEN</span>
+        <span class="op">SIGNAL SQLSTATE</span> <span class="str">'45000'</span>
+            <span class="kw">SET</span> MESSAGE_TEXT <span class="op">=</span> <span class="str">'El cliente ya redimió este cupón.'</span>;
+    <span class="kw">END IF</span>;
+
+    <span class="fn">START TRANSACTION</span>;
+    <span class="kw">SELECT</span> subtotal <span class="kw">INTO</span> v_subtotal
+    <span class="kw">FROM</span>  pedidos <span class="kw">WHERE</span> id_pedido <span class="op">=</span> p_id_pedido <span class="kw">FOR UPDATE</span>;
+
+    <span class="kw">SET</span> v_descuento <span class="op">=</span> <span class="fn">ROUND</span>((v_subtotal <span class="op">*</span> v_porcentaje) <span class="op">/</span> <span class="nm">100</span>, <span class="nm">2</span>);
+
+    <span class="kw">UPDATE</span> pedidos <span class="kw">SET</span>
+        descuento <span class="op">=</span> v_descuento,
+        total     <span class="op">=</span> subtotal <span class="op">-</span> v_descuento
+    <span class="kw">WHERE</span> id_pedido <span class="op">=</span> p_id_pedido;
+
+    <span class="kw">INSERT INTO</span> uso_cupones (id_cupon, id_pedido, id_cliente)
+    <span class="kw">VALUES</span> (v_id_cupon, p_id_pedido, p_id_cliente);
+    <span class="fn">COMMIT</span>;
+<span class="kw">END</span>$$</code></pre>
+      </div>
+    </div>
+
+    <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+      <div class="flex items-center justify-between p-6 select-none">
+        <div class="flex items-center">
+          <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">03</span>
+          <div>
+            <div class="font-mono text-lg font-bold text-[#E8FF00]">generar_despacho_logistico</div>
+            <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Crea el seguimiento de envío solo si el pago está aprobado</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="code-tag green">TRANSACCIÓN</span>
+          <span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+        </div>
+      </div>
+      <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Parámetros IN</div><div class="text-white font-body text-sm leading-tight">p_id_pedido, p_id_empresa</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Lógica</div><div class="text-white font-body text-sm leading-tight">Verifica estado del pedido y aprobación del pago · Genera código tracking único · Crea registro en seguimiento_envios</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Tracking</div><div class="text-white font-body text-sm leading-tight">CONCAT('TRACK-', empresa, '-', año, '-', LPAD(id_pedido, 6, '0'))</div></div>
+        </div>
+        <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="kw">CREATE PROCEDURE</span> <span class="fn">generar_despacho_logistico</span>(
+    <span class="kw">IN</span> p_id_pedido  <span class="dt">INT</span>,
+    <span class="kw">IN</span> p_id_empresa <span class="dt">INT</span>
+)
+<span class="kw">BEGIN</span>
+    <span class="kw">DECLARE</span> v_estado_pedido  <span class="dt">VARCHAR</span>(<span class="nm">20</span>);
+    <span class="kw">DECLARE</span> v_estado_pago    <span class="dt">VARCHAR</span>(<span class="nm">20</span>);
+    <span class="kw">DECLARE</span> v_codigo_tracking <span class="dt">VARCHAR</span>(<span class="nm">100</span>);
+
+    <span class="kw">SELECT</span> estado <span class="kw">INTO</span> v_estado_pedido
+    <span class="kw">FROM</span> pedidos <span class="kw">WHERE</span> id_pedido <span class="op">=</span> p_id_pedido;
+
+    <span class="kw">SELECT</span> estado <span class="kw">INTO</span> v_estado_pago
+    <span class="kw">FROM</span> pagos <span class="kw">WHERE</span> id_pedido <span class="op">=</span> p_id_pedido <span class="kw">LIMIT</span> <span class="nm">1</span>;
+
+    <span class="kw">IF</span> v_estado_pedido <span class="kw">IN</span> (<span class="str">'cancelado'</span>, <span class="str">'entregado'</span>) <span class="kw">THEN</span>
+        <span class="op">SIGNAL SQLSTATE</span> <span class="str">'45000'</span>
+            <span class="kw">SET</span> MESSAGE_TEXT <span class="op">=</span> <span class="str">'Estado final: no admite despacho.'</span>;
+    <span class="kw">END IF</span>;
+
+    <span class="kw">IF</span> v_estado_pago <span class="op">!=</span> <span class="str">'aprobado'</span> <span class="kw">THEN</span>
+        <span class="op">SIGNAL SQLSTATE</span> <span class="str">'45000'</span>
+            <span class="kw">SET</span> MESSAGE_TEXT <span class="op">=</span> <span class="str">'Pago no aprobado. Logística bloqueada.'</span>;
+    <span class="kw">END IF</span>;
+
+    <span class="fn">START TRANSACTION</span>;
+    <span class="kw">SET</span> v_codigo_tracking <span class="op">=</span> <span class="fn">CONCAT</span>(
+        <span class="str">'TRACK-'</span>, p_id_empresa, <span class="str">'-'</span>,
+        <span class="fn">YEAR</span>(<span class="fn">CURRENT_DATE</span>), <span class="str">'-'</span>,
+        <span class="fn">LPAD</span>(p_id_pedido, <span class="nm">6</span>, <span class="str">'0'</span>)
+    );
+
+    <span class="kw">INSERT INTO</span> seguimiento_envios
+        (id_pedido, id_empresa, codigo_tracking, estado_envio)
+    <span class="kw">VALUES</span>
+        (p_id_pedido, p_id_empresa, v_codigo_tracking, <span class="str">'en_preparacion'</span>);
+
+    <span class="kw">UPDATE</span> pedidos <span class="kw">SET</span> estado <span class="op">=</span> <span class="str">'en_preparacion'</span>
+    <span class="kw">WHERE</span> id_pedido <span class="op">=</span> p_id_pedido;
+    <span class="fn">COMMIT</span>;
+<span class="kw">END</span>$$</code></pre>
+      </div>
+    </div>
+
+    <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+      <div class="flex items-center justify-between p-6 select-none">
+        <div class="flex items-center">
+          <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">04</span>
+          <div>
+            <div class="font-mono text-lg font-bold text-[#E8FF00]">amortizar_deuda_ctacte</div>
+            <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Registra un pago parcial en la cuenta corriente de un cliente mayorista</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="code-tag green">TRANSACCIÓN</span>
+          <span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+        </div>
+      </div>
+      <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Parámetros IN</div><div class="text-white font-body text-sm leading-tight">p_id_cliente, p_monto_abonado, p_referencia_bancaria</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Restricciones</div><div class="text-white font-body text-sm leading-tight">Solo mayoristas · Monto > 0 · No se aceptan pagos superiores a la deuda actual</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Lógica</div><div class="text-white font-body text-sm leading-tight">Obtiene saldo más reciente · Calcula saldo posterior · Inserta movimiento tipo "pago"</div></div>
+        </div>
+        <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="kw">CREATE PROCEDURE</span> <span class="fn">amortizar_deuda_ctacte</span>(
+    <span class="kw">IN</span> p_id_cliente         <span class="dt">INT</span>,
+    <span class="kw">IN</span> p_monto_abonado      <span class="dt">DECIMAL</span>(<span class="nm">12</span>,<span class="nm">2</span>),
+    <span class="kw">IN</span> p_referencia_bancaria <span class="dt">TEXT</span>
+)
+<span class="kw">BEGIN</span>
+    <span class="kw">DECLARE</span> v_tipo_cliente    <span class="dt">VARCHAR</span>(<span class="nm">20</span>);
+    <span class="kw">DECLARE</span> v_saldo_anterior  <span class="dt">DECIMAL</span>(<span class="nm">12</span>,<span class="nm">2</span>);
+    <span class="kw">DECLARE</span> v_saldo_posterior <span class="dt">DECIMAL</span>(<span class="nm">12</span>,<span class="nm">2</span>);
+
+    <span class="kw">SELECT</span> tipo_cliente <span class="kw">INTO</span> v_tipo_cliente
+    <span class="kw">FROM</span> clientes <span class="kw">WHERE</span> id_cliente <span class="op">=</span> p_id_cliente;
+
+    <span class="kw">IF</span> v_tipo_cliente <span class="op">!=</span> <span class="str">'mayorista'</span> <span class="kw">THEN</span>
+        <span class="op">SIGNAL SQLSTATE</span> <span class="str">'45000'</span>
+            <span class="kw">SET</span> MESSAGE_TEXT <span class="op">=</span> <span class="str">'Operación exclusiva para clientes Mayoristas.'</span>;
+    <span class="kw">END IF</span>;
+
+    <span class="fn">START TRANSACTION</span>;
+    <span class="kw">SELECT</span> saldo_posterior <span class="kw">INTO</span> v_saldo_anterior
+    <span class="kw">FROM</span>  cuenta_corriente
+    <span class="kw">WHERE</span> id_cliente <span class="op">=</span> p_id_cliente
+    <span class="kw">ORDER BY</span> fecha <span class="kw">DESC</span> <span class="kw">LIMIT</span> <span class="nm">1</span> <span class="kw">FOR UPDATE</span>;
+
+    <span class="kw">SET</span> v_saldo_posterior <span class="op">=</span>
+        <span class="fn">COALESCE</span>(v_saldo_anterior, <span class="nm">0</span>) <span class="op">-</span> p_monto_abonado;
+
+    <span class="kw">IF</span> v_saldo_posterior <span class="op">&lt;</span> <span class="nm">0</span> <span class="kw">THEN</span>
+        <span class="op">SIGNAL SQLSTATE</span> <span class="str">'45000'</span>
+            <span class="kw">SET</span> MESSAGE_TEXT <span class="op">=</span> <span class="str">'El pago supera la deuda actual.'</span>;
+    <span class="kw">END IF</span>;
+
+    <span class="kw">INSERT INTO</span> cuenta_corriente
+        (id_cliente, tipo_movimiento, monto,
+         saldo_anterior, saldo_posterior, descripcion)
+    <span class="kw">VALUES</span>
+        (p_id_cliente, <span class="str">'pago'</span>, p_monto_abonado,
+         v_saldo_anterior, v_saldo_posterior, p_referencia_bancaria);
+    <span class="fn">COMMIT</span>;
+<span class="kw">END</span>$$</code></pre>
+      </div>
+    </div>
+
+    <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+      <div class="flex items-center justify-between p-6 select-none">
+        <div class="flex items-center">
+          <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">05</span>
+          <div>
+            <div class="font-mono text-lg font-bold text-[#E8FF00]">convertir_carrito_a_pedido</div>
+            <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Convierte un carrito activo en pedido con pago, en una sola transacción atómica</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="code-tag green">TRANSACCIÓN</span>
+          <span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+        </div>
+      </div>
+      <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Parámetros IN</div><div class="text-white font-body text-sm leading-tight">p_id_usuario, p_id_metodo_pago, p_metodo_envio, p_direccion</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Flujo atómico</div><div class="text-white font-body text-sm leading-tight">Bloquea carrito â†’ calcula subtotal â†’ genera pedido â†’ copia ítems â†’ crea pago â†’ cierra carrito</div></div>
+          <div class="flex flex-col"><div class="text-[10px] text-[#7A7A95] font-bold tracking-widest uppercase mb-1">Número de pedido</div><div class="text-white font-body text-sm leading-tight">NS-{año}-{rand 99999} — único por transacción</div></div>
+        </div>
+        <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="kw">CREATE PROCEDURE</span> <span class="fn">convertir_carrito_a_pedido</span>(
+    <span class="kw">IN</span> p_id_usuario     <span class="dt">INT</span>,
+    <span class="kw">IN</span> p_id_metodo_pago <span class="dt">INT</span>,
+    <span class="kw">IN</span> p_metodo_envio   <span class="dt">VARCHAR</span>(<span class="nm">30</span>),
+    <span class="kw">IN</span> p_direccion      <span class="dt">TEXT</span>
+)
+<span class="kw">BEGIN</span>
+    <span class="kw">DECLARE</span> v_id_carrito     <span class="dt">INT</span>;
+    <span class="kw">DECLARE</span> v_id_pedido      <span class="dt">INT</span>;
+    <span class="kw">DECLARE</span> v_subtotal_global <span class="dt">DECIMAL</span>(<span class="nm">12</span>,<span class="nm">2</span>);
+    <span class="kw">DECLARE</span> v_nro_pedido     <span class="dt">VARCHAR</span>(<span class="nm">30</span>);
+
+    <span class="fn">START TRANSACTION</span>;
+
+    <span class="kw">SELECT</span> id_carrito <span class="kw">INTO</span> v_id_carrito
+    <span class="kw">FROM</span>  carritos
+    <span class="kw">WHERE</span> id_usuario <span class="op">=</span> p_id_usuario <span class="kw">AND</span> estado <span class="op">=</span> <span class="str">'activo'</span>
+    <span class="kw">ORDER BY</span> fecha_creacion <span class="kw">DESC LIMIT</span> <span class="nm">1</span> <span class="kw">FOR UPDATE</span>;
+
+    <span class="kw">SELECT</span> <span class="fn">COALESCE</span>(<span class="fn">SUM</span>(cantidad <span class="op">*</span> precio_unitario), <span class="nm">0</span>)
+    <span class="kw">INTO</span>   v_subtotal_global
+    <span class="kw">FROM</span>   items_carrito
+    <span class="kw">WHERE</span>  id_carrito <span class="op">=</span> v_id_carrito;
+
+    <span class="kw">SET</span> v_nro_pedido <span class="op">=</span> <span class="fn">CONCAT</span>(<span class="str">'NS-'</span>,
+        <span class="fn">DATE_FORMAT</span>(<span class="fn">CURRENT_DATE</span>, <span class="str">'%Y'</span>), <span class="str">'-'</span>,
+        <span class="fn">FLOOR</span>(<span class="fn">RAND</span>() <span class="op">*</span> <span class="nm">99999</span>));
+
+    <span class="kw">INSERT INTO</span> pedidos
+        (id_cliente, numero_pedido, estado, subtotal, descuento, total,
+         metodo_envio, direccion_envio)
+    <span class="kw">VALUES</span>
+        (p_id_usuario, v_nro_pedido, <span class="str">'pendiente'</span>,
+         v_subtotal_global, <span class="nm">0</span>, v_subtotal_global,
+         p_metodo_envio, p_direccion);
+
+    <span class="kw">SET</span> v_id_pedido <span class="op">=</span> <span class="fn">LAST_INSERT_ID</span>();
+
+    <span class="cm">-- Copia masiva de ítems del carrito al detalle del pedido</span>
+    <span class="kw">INSERT INTO</span> detalle_pedido
+        (id_pedido, id_producto, cantidad, precio_unitario, subtotal, descuento)
+    <span class="kw">SELECT</span> v_id_pedido, id_producto, cantidad,
+           precio_unitario, (cantidad <span class="op">*</span> precio_unitario), <span class="nm">0</span>
+    <span class="kw">FROM</span>  items_carrito <span class="kw">WHERE</span> id_carrito <span class="op">=</span> v_id_carrito;
+
+    <span class="kw">INSERT INTO</span> pagos (id_pedido, id_metodo, monto, estado)
+    <span class="kw">VALUES</span> (v_id_pedido, p_id_metodo_pago, v_subtotal_global, <span class="str">'pendiente'</span>);
+
+    <span class="kw">UPDATE</span> carritos <span class="kw">SET</span> estado <span class="op">=</span> <span class="str">'convertido'</span>
+    <span class="kw">WHERE</span> id_carrito <span class="op">=</span> v_id_carrito;
+
+    <span class="fn">COMMIT</span>;
+<span class="kw">END</span>$$</code></pre>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-16"></div>
+
+<!-- NORMALIZACION -->
+<section id="normalizacion" class="max-w-[1600px] mx-auto px-6 py-20 relative z-10">
+  <div class="mb-12 flex flex-col items-center justify-center text-center">
+    <div class="inline-flex items-center px-3 py-1 bg-[#111118]/60 backdrop-blur-md border border-white/10 mb-6 group cursor-default font-mono text-[10px] text-[#E8FF00] tracking-widest uppercase">⬡ Fundamentación Teórica</div>
+    <h2 class="text-4xl md:text-6xl font-headline font-black tracking-tighter text-[#F0F0F8] mb-4 uppercase">NORMALIZACIÓN</h2>
+    <p class="text-[#7A7A95] max-w-2xl font-mono text-sm leading-relaxed">La base de datos NexoSport está diseñada cumpliendo las tres primeras formas normales (1FN, 2FN, 3FN), garantizando consistencia y eliminación de redundancias.</p>
+  </div>
+  <div class="norm-grid reveal">
+    <div class="bg-[#111118]/80 border border-white/10 p-8 rounded-md relative overflow-hidden group hover:border-[#00E5FF]/40 transition-all">
+      <div class="norm-nf">1FN</div>
+      <div class="text-2xl font-headline font-black text-[#00E5FF] mb-4 relative z-10 uppercase">Primera Forma Normal</div>
+      <div class="text-[#7A7A95] text-sm mb-6 relative z-10 leading-relaxed font-body">Todos los atributos contienen valores atómicos e indivisibles. No existen grupos repetitivos ni atributos multivaluados.</div>
+      <div class="norm-check">
+        <span>Cada columna almacena un único valor</span>
+        <span>Todas las tablas tienen clave primaria definida</span>
+        <span>No hay listas ni conjuntos dentro de campos</span>
+        <span>El campo <code class="text-[#00E5FF] text-xs">datos_extra JSON</code> en pagos es atómico para el motor</span>
+      </div>
+    </div>
+    <div class="bg-[#111118]/80 border border-white/10 p-8 rounded-md relative overflow-hidden group hover:border-[#00E5FF]/40 transition-all">
+      <div class="norm-nf">2FN</div>
+      <div class="text-2xl font-headline font-black text-[#00E5FF] mb-4 relative z-10 uppercase">Segunda Forma Normal</div>
+      <div class="text-[#7A7A95] text-sm mb-6 relative z-10 leading-relaxed font-body">Cumple 1FN y todo atributo no clave depende completamente de la clave primaria entera. Sin dependencias parciales.</div>
+      <div class="norm-check">
+        <span>Tablas de herencia (clientes, vendedores, admins) usan PK = FK a usuarios</span>
+        <span>precios_por_tipo: clave compuesta (producto + tipo_cliente + cantidad)</span>
+        <span>detalle_pedido: cada campo depende del ítem completo, no solo del pedido</span>
+        <span>items_carrito: UNIQUE (id_carrito, id_producto) previene duplicados</span>
+      </div>
+    </div>
+    <div class="bg-[#111118]/80 border border-white/10 p-8 rounded-md relative overflow-hidden group hover:border-[#00E5FF]/40 transition-all">
+      <div class="norm-nf">3FN</div>
+      <div class="text-2xl font-headline font-black text-[#00E5FF] mb-4 relative z-10 uppercase">Tercera Forma Normal</div>
+      <div class="text-[#7A7A95] text-sm mb-6 relative z-10 leading-relaxed font-body">Cumple 2FN y no existen dependencias transitivas entre atributos no clave. Cada dato depende solo de su PK.</div>
+      <div class="norm-check">
+        <span>Proveedores separados de productos: no se repite nombre/CUIT en cada producto</span>
+        <span>Categorías en tabla propia: no hay datos de categoría en productos</span>
+        <span>Empresas de transporte separadas de seguimiento_envios</span>
+        <span>Métodos de pago normalizados en metodos_pago, referenciados por FK</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal bg-[#111118] border border-white/10 rounded-xl p-6">
+    <div class="text-[0.65rem] text-[#7A7A95] uppercase tracking-[0.15em] mb-4 font-mono">Conceptos clave para la evaluación</div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div>
+        <div class="text-xs font-bold text-[#E8FF00] mb-1">Clave Primaria (PK)</div>
+        <div class="text-xs text-[#7A7A95] leading-relaxed">Identifica unívocamente cada fila. Nunca nula. Todas las tablas la tienen declarada con AUTO_INCREMENT o como PK natural.</div>
+      </div>
+      <div>
+        <div class="text-xs font-bold text-[#00E5FF] mb-1">Clave Foránea (FK)</div>
+        <div class="text-xs text-[#7A7A95] leading-relaxed">Garantiza integridad referencial. Usamos ON DELETE CASCADE en relaciones donde la entidad hija no tiene sentido sin la padre.</div>
+      </div>
+      <div>
+        <div class="text-xs font-bold text-[#00FF66] mb-1">Índices</div>
+        <div class="text-xs text-[#7A7A95] leading-relaxed">Se crearon índices explícitos en columnas de búsqueda frecuente: email, estado, id_categoria, id_cliente, fecha, código de tracking.</div>
+      </div>
+      <div>
+        <div class="text-xs font-bold text-[#FF8A00] mb-1">Restricciones CHECK</div>
+        <div class="text-xs text-[#7A7A95] leading-relaxed">Aplicadas en campos de dominio cerrado: estado, tipo_cliente, tipo_movimiento, calificacion (1–5), porcentaje_descuento (>0 y ≤100).</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-16"></div>
+
+<!-- DDL / DML -->
+<section id="ddl-dml" class="max-w-[1600px] mx-auto px-6 py-20 relative z-10">
+  <div class="mb-12 flex flex-col items-center justify-center text-center">
+    <div class="inline-flex items-center px-3 py-1 bg-[#111118]/60 backdrop-blur-md border border-white/10 mb-6 group cursor-default font-mono text-[10px] text-[#E8FF00] tracking-widest uppercase">⬡ Bloque 3</div>
+    <h2 class="text-4xl md:text-6xl font-headline font-black tracking-tighter text-[#F0F0F8] mb-4 uppercase">DDL / DML</h2>
+    <p class="text-[#7A7A95] max-w-2xl font-mono text-sm leading-relaxed">Comandos de definición y manipulación de datos utilizados en el proyecto. DDL modifica la estructura; DML opera sobre los datos.</p>
+  </div>
+
+  <div class="tabs-nav reveal mx-auto">
+    <button class="tab-btn active" data-tab="tab-ddl">DDL — Definición</button>
+    <button class="tab-btn" data-tab="tab-dml">DML — Manipulación</button>
+  </div>
+
+  <div id="tab-ddl" class="tab-panel active">
+    <div class="code-cards">
+
+      <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+        <div class="flex items-center justify-between p-6 select-none">
+          <div class="flex items-center">
+            <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">ALTER</span>
+            <div>
+              <div class="font-mono text-lg font-bold text-[#E8FF00]">ALTER TABLE — Modificar estructura</div>
+              <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Agregar columnas, restricciones y comentarios a tablas existentes</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="px-2 py-0.5 text-[10px] font-bold tracking-tighter bg-white/10 border border-white/20 uppercase">DDL</span><span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+          </div>
+        </div>
+        <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+          <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="cm">-- Agregar columna para auditoría de compras del cliente</span>
+<span class="kw">ALTER TABLE</span> clientes
+    <span class="kw">ADD COLUMN</span> fecha_ultima_compra <span class="dt">DATE</span>;
+
+<span class="cm">-- Restricción: el límite de crédito nunca puede ser negativo</span>
+<span class="kw">ALTER TABLE</span> clientes
+    <span class="kw">ADD CONSTRAINT</span> chk_limite_credito_positivo
+        <span class="kw">CHECK</span> (limite_credito <span class="op">&gt;=</span> <span class="nm">0</span>);
+
+<span class="cm">-- Agregar comentario a tabla para documentación interna</span>
+<span class="kw">ALTER TABLE</span> productos
+    COMMENT <span class="op">=</span> <span class="str">'Catálogo centralizado de artículos deportivos de NexoSport'</span>;
+
+<span class="cm">-- Modificar tipo + agregar comentario de columna</span>
+<span class="kw">ALTER TABLE</span> productos
+    <span class="kw">MODIFY COLUMN</span> precio_base <span class="dt">DECIMAL</span>(<span class="nm">12</span>,<span class="nm">2</span>) <span class="kw">NOT NULL</span>
+        COMMENT <span class="str">'Precio base minorista sin descuentos'</span>;</code></pre>
+        </div>
+      </div>
+
+      <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+        <div class="flex items-center justify-between p-6 select-none">
+          <div class="flex items-center">
+            <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6">INDEX</span>
+            <div>
+              <div class="font-mono text-lg font-bold text-[#E8FF00]">CREATE INDEX — Optimización de consultas</div>
+              <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Índices compuestos y simples para acelerar búsquedas frecuentes</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="px-2 py-0.5 text-[10px] font-bold tracking-tighter bg-white/10 border border-white/20 uppercase">DDL</span><span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+          </div>
+        </div>
+        <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+          <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="cm">-- Índice compuesto para búsquedas por fecha y estado de pedido</span>
+<span class="kw">CREATE INDEX</span> pedidos_fecha_estado
+    <span class="kw">ON</span> pedidos(fecha, estado);
+
+<span class="cm">-- Índice para localizar códigos de tracking rápidamente</span>
+<span class="kw">CREATE INDEX</span> seguimiento_codigo
+    <span class="kw">ON</span> seguimiento_envios(codigo_tracking);</code></pre>
+        </div>
+      </div>
+
+      <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+        <div class="flex items-center justify-between p-6 select-none">
+          <div class="flex items-center">
+            <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6 text-[#FF4D6D]">DROP</span>
+            <div>
+              <div class="font-mono text-lg font-bold text-[#E8FF00]">DROP TABLE — Eliminación de tablas</div>
+              <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Demostración de eliminación de tabla temporal de reportes</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="px-2 py-0.5 text-[10px] font-bold tracking-tighter bg-white/10 border border-white/20 uppercase">DDL</span><span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+          </div>
+        </div>
+        <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+          <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="cm">-- Crear tabla temporal para reportes mensuales</span>
+<span class="kw">CREATE TABLE</span> tmp_reporte_mensual (
+    id_reporte   <span class="dt">INT AUTO_INCREMENT PRIMARY KEY</span>,
+    fecha_generado <span class="dt">TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span>,
+    total_ventas  <span class="dt">DECIMAL</span>(<span class="nm">12</span>,<span class="nm">2</span>)
+);
+
+<span class="cm">-- Eliminar la tabla temporal una vez procesada</span>
+<span class="kw">DROP TABLE</span> tmp_reporte_mensual;</code></pre>
+        </div>
+      </div>
+
+      <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+        <div class="flex items-center justify-between p-6 select-none">
+          <div class="flex items-center">
+            <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6 text-[#FF4D6D]">TRUNCATE</span>
+            <div>
+              <div class="font-mono text-lg font-bold text-[#E8FF00]">TRUNCATE — Vaciado rápido de tabla</div>
+              <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Vacía una tabla sin eliminar su estructura (más rápido que DELETE *)</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="px-2 py-0.5 text-[10px] font-bold tracking-tighter bg-white/10 border border-white/20 uppercase">DDL</span><span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+          </div>
+        </div>
+        <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+          <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="cm">-- Crear tabla de logs de auditoría</span>
+<span class="kw">CREATE TABLE</span> log_auditoria (
+    id_log      <span class="dt">INT AUTO_INCREMENT PRIMARY KEY</span>,
+    descripcion <span class="dt">TEXT</span>
+);
+
+<span class="cm">-- Insertar registros de prueba</span>
+<span class="kw">INSERT INTO</span> log_auditoria (descripcion) <span class="kw">VALUES</span>
+    (<span class="str">'Inicio de mantenimiento'</span>),
+    (<span class="str">'Actualización de catálogo'</span>);
+
+<span class="cm">-- Vaciar la tabla instantáneamente (resetea AUTO_INCREMENT)</span>
+<span class="kw">TRUNCATE TABLE</span> log_auditoria;
+
+<span class="cm">-- Eliminar la tabla de logs</span>
+<span class="kw">DROP TABLE</span> log_auditoria;</code></pre>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="tab-dml" class="tab-panel">
+    <div class="code-cards">
+
+      <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+        <div class="flex items-center justify-between p-6 select-none">
+          <div class="flex items-center">
+            <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6 text-[#00E5FF]">SELECT</span>
+            <div>
+              <div class="font-mono text-lg font-bold text-[#E8FF00]">SELECT — Consultas de datos</div>
+              <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Tres consultas con JOINs múltiples, GROUP BY y filtros de negocio</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="code-tag blue">DML</span><span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+          </div>
+        </div>
+        <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+          <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="cm">-- A: Estado de envíos activos en tiempo real</span>
+<span class="kw">SELECT</span>
+    ped.numero_pedido,
+    <span class="fn">CONCAT</span>(u.nombre, <span class="str">' '</span>, u.apellido) <span class="kw">AS</span> cliente,
+    emp.nombre                          <span class="kw">AS</span> empresa_transporte,
+    seg.codigo_tracking,
+    seg.estado_envio,
+    ped.metodo_envio
+<span class="kw">FROM</span> pedidos ped
+<span class="kw">INNER JOIN</span> clientes cl               <span class="kw">ON</span> ped.id_cliente <span class="op">=</span> cl.id_cliente
+<span class="kw">INNER JOIN</span> usuarios u                <span class="kw">ON</span> cl.id_cliente  <span class="op">=</span> u.id_usuario
+<span class="kw">INNER JOIN</span> seguimiento_envios seg    <span class="kw">ON</span> ped.id_pedido  <span class="op">=</span> seg.id_pedido
+<span class="kw">INNER JOIN</span> empresas_transporte emp   <span class="kw">ON</span> seg.id_empresa <span class="op">=</span> emp.id_empresa
+<span class="kw">WHERE</span> ped.estado <span class="kw">NOT IN</span> (<span class="str">'entregado'</span>, <span class="str">'cancelado'</span>)
+<span class="kw">ORDER BY</span> ped.fecha <span class="kw">DESC</span>;
+
+<span class="cm">-- B: Impacto de cupones de descuento en ventas</span>
+<span class="kw">SELECT</span>
+    cup.codigo_promocional,
+    cup.porcentaje_descuento,
+    <span class="fn">COUNT</span>(uso.id_uso)       <span class="kw">AS</span> veces_utilizado,
+    <span class="fn">SUM</span>(ped.descuento)      <span class="kw">AS</span> total_dinero_descontado,
+    <span class="fn">SUM</span>(ped.total)          <span class="kw">AS</span> total_ingresos_generados
+<span class="kw">FROM</span> cupones_descuento cup
+<span class="kw">LEFT JOIN</span> uso_cupones uso <span class="kw">ON</span> cup.id_cupon  <span class="op">=</span> uso.id_cupon
+<span class="kw">LEFT JOIN</span> pedidos ped     <span class="kw">ON</span> uso.id_pedido <span class="op">=</span> ped.id_pedido
+<span class="kw">GROUP BY</span>  cup.id_cupon, cup.codigo_promocional, cup.porcentaje_descuento
+<span class="kw">ORDER BY</span>  veces_utilizado <span class="kw">DESC</span>;
+
+<span class="cm">-- C: Productos activos con stock por debajo del mínimo</span>
+<span class="kw">SELECT</span>
+    p.nombre    <span class="kw">AS</span> producto,
+    c.nombre    <span class="kw">AS</span> categoria,
+    prov.nombre <span class="kw">AS</span> proveedor,
+    i.stock_actual,
+    p.precio_base
+<span class="kw">FROM</span> productos p
+<span class="kw">INNER JOIN</span> categorias c      <span class="kw">ON</span> p.id_categoria  <span class="op">=</span> c.id_categoria
+<span class="kw">LEFT JOIN</span>  proveedores prov  <span class="kw">ON</span> p.id_proveedor   <span class="op">=</span> prov.id_proveedor
+<span class="kw">INNER JOIN</span> inventario i      <span class="kw">ON</span> p.id_producto    <span class="op">=</span> i.id_producto
+<span class="kw">WHERE</span> p.estado <span class="op">=</span> <span class="str">'activo'</span>
+  <span class="kw">AND</span> i.stock_actual <span class="op">&lt;</span> i.stock_minimo;</code></pre>
+        </div>
+      </div>
+
+      <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+        <div class="flex items-center justify-between p-6 select-none">
+          <div class="flex items-center">
+            <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6 text-[#00FF66]">INSERT</span>
+            <div>
+              <div class="font-mono text-lg font-bold text-[#E8FF00]">INSERT — Inserción de registros</div>
+              <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Nueva empresa de transporte + producto con inventario usando LAST_INSERT_ID()</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="code-tag blue">DML</span><span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+          </div>
+        </div>
+        <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+          <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="cm">-- Insertar nueva empresa logística</span>
+<span class="kw">INSERT INTO</span> empresas_transporte (nombre, telefono, email_contacto)
+<span class="kw">VALUES</span> (<span class="str">'Transportes Cuyo Express'</span>, <span class="str">'0810-555-8899'</span>,
+         <span class="str">'contacto@cuyoexpress.com.ar'</span>);
+
+<span class="cm">-- Insertar nuevo producto</span>
+<span class="kw">INSERT INTO</span> productos
+    (nombre, descripcion, marca, color, precio_base, estado,
+     id_categoria, id_proveedor)
+<span class="kw">VALUES</span>
+    (<span class="str">'Zapatillas Running'</span>, <span class="str">'Calzado ligero'</span>, <span class="str">'Nike'</span>, <span class="str">'Negro'</span>,
+     <span class="nm">145000.00</span>, <span class="str">'activo'</span>, <span class="nm">1</span>, <span class="nm">1</span>);
+
+<span class="cm">-- Insertar su inventario usando el ID recién generado</span>
+<span class="kw">INSERT INTO</span> inventario (id_producto, stock_actual, stock_minimo, ubicacion)
+<span class="kw">VALUES</span> (<span class="fn">LAST_INSERT_ID</span>(), <span class="nm">15</span>, <span class="nm">3</span>, <span class="str">'Góndola A3'</span>);</code></pre>
+        </div>
+      </div>
+
+      <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+        <div class="flex items-center justify-between p-6 select-none">
+          <div class="flex items-center">
+            <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6 text-[#FF8A00]">UPDATE</span>
+            <div>
+              <div class="font-mono text-lg font-bold text-[#E8FF00]">UPDATE — Actualización de registros</div>
+              <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Ajuste inflacionario de precios por categoría + avance de estado logístico</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="code-tag blue">DML</span><span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+          </div>
+        </div>
+        <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+          <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="cm">-- Actualizar precios base con ajuste inflacionario del 12%</span>
+<span class="cm">-- aplicado a toda la categoría de Natación (id = 5)</span>
+<span class="kw">UPDATE</span> productos
+<span class="kw">SET</span>    precio_base <span class="op">=</span> <span class="fn">ROUND</span>(precio_base <span class="op">*</span> <span class="nm">1.12</span>, <span class="nm">2</span>)
+<span class="kw">WHERE</span>  id_categoria <span class="op">=</span> <span class="nm">5</span>;
+
+<span class="cm">-- Avanzar el estado de un envío logístico a "en tránsito"</span>
+<span class="kw">UPDATE</span> seguimiento_envios
+<span class="kw">SET</span>    estado_envio <span class="op">=</span> <span class="str">'en_transito'</span>
+<span class="kw">WHERE</span>  codigo_tracking <span class="op">=</span> <span class="str">'AND-9988776655'</span>
+  <span class="kw">AND</span>  estado_envio    <span class="op">=</span> <span class="str">'despachado'</span>;</code></pre>
+        </div>
+      </div>
+
+      <div class="glass-card group cursor-pointer mb-4 bg-[#111118]/80 border border-white/10 rounded-md transition-all hover:border-[#E8FF00]/30" data-state="collapsed">
+        <div class="flex items-center justify-between p-6 select-none">
+          <div class="flex items-center">
+            <span class="font-headline text-4xl text-white/20 group-hover:text-[#E8FF00] transition-colors mr-6 text-[#FF4D6D]">DELETE</span>
+            <div>
+              <div class="font-mono text-lg font-bold text-[#E8FF00]">DELETE — Eliminación de registros</div>
+              <div class="text-[#7A7A95] text-xs max-w-xl mt-1">Limpieza de carritos abandonados y cupones vencidos, con Safe Updates</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="code-tag blue">DML</span><span class="text-[#E8FF00] transition-transform duration-300 chevron-icon text-lg">▾</span>
+          </div>
+        </div>
+        <div class="hidden border-t border-white/5 bg-[#0D0D14] p-6 font-mono text-sm overflow-x-auto code-body-content">
+          <pre class="relative bg-[#181825] border border-white/5 p-4 rounded-sm language-sql"><code class="language-sql"><span class="cm">-- Desactivar restricción de Safe Updates temporalmente</span>
+<span class="kw">SET</span> SQL_SAFE_UPDATES <span class="op">=</span> <span class="nm">0</span>;
+
+<span class="cm">-- Eliminar carritos abandonados con más de 30 días</span>
+<span class="kw">DELETE FROM</span> carritos
+<span class="kw">WHERE</span>  estado <span class="op">=</span> <span class="str">'abandonado'</span>
+  <span class="kw">AND</span>  fecha_actualizacion <span class="op">&lt;</span> <span class="fn">NOW</span>() <span class="op">-</span> <span class="kw">INTERVAL</span> <span class="nm">30</span> <span class="kw">DAY</span>;
+
+<span class="cm">-- Eliminar cupones inactivos ya vencidos</span>
+<span class="kw">DELETE FROM</span> cupones_descuento
+<span class="kw">WHERE</span>  estado <span class="op">=</span> <span class="str">'inactivo'</span>
+  <span class="kw">AND</span>  fecha_vencimiento <span class="op">&lt;</span> <span class="fn">CURRENT_DATE</span>;
+
+<span class="cm">-- Restaurar Safe Updates por seguridad</span>
+<span class="kw">SET</span> SQL_SAFE_UPDATES <span class="op">=</span> <span class="nm">1</span>;</code></pre>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-16"></div>
+
+<!-- VISUALIZACIONES -->
+<section id="visualizaciones" class="max-w-[1600px] mx-auto px-6 py-20 relative z-10">
+  <div class="mb-12 flex flex-col items-center justify-center text-center">
+    <div class="inline-flex items-center px-3 py-1 bg-[#111118]/60 backdrop-blur-md border border-white/10 mb-6 group cursor-default font-mono text-[10px] text-[#E8FF00] tracking-widest uppercase">⬡ Análisis Visual de Datos</div>
+    <h2 class="text-4xl md:text-6xl font-headline font-black tracking-tighter text-[#F0F0F8] mb-4 uppercase">VISUALIZACIONES</h2>
+    <p class="text-[#7A7A95] max-w-2xl font-mono text-sm leading-relaxed">Representaciones gráficas generadas a partir de los datos reales de la base NexoSport. Cada gráfico refleja información extraida del DDL y los datos de prueba insertados.</p>
+  </div>
+
+  <div class="charts-grid reveal">
+
+    <div class="bg-[#111118]/80 border border-white/10 p-6 rounded-md hover:border-white/20 transition-all">
+      <div class="chart-card-label">01 &mdash; DISTRIBUCIÓN ESTRUCTURAL</div>
+      <div class="chart-card-title">Tablas por módulo funcional</div>
+      <div class="chart-card-subtitle">21 tablas agrupadas en 6 módulos: Usuarios, Catálogo, Inventario, Pedidos, Logística y Mayoristas.</div>
+      <canvas id="chart-modulos" height="240"></canvas>
+    </div>
+
+    <div class="bg-[#111118]/80 border border-white/10 p-6 rounded-md hover:border-white/20 transition-all">
+      <div class="chart-card-label">02 &mdash; INVENTARIO</div>
+      <div class="chart-card-title">Stock actual por categoría</div>
+      <div class="chart-card-subtitle">Verde = stock óptimo · Naranja = stock bajo · Rojo = stock crítico. Basado en datos INSERT reales.</div>
+      <canvas id="chart-stock" height="240"></canvas>
+    </div>
+
+    <div class="bg-[#111118]/80 border border-white/10 p-6 rounded-md hover:border-white/20 transition-all">
+      <div class="chart-card-label">03 &mdash; ANÁLISIS DE PEDIDOS</div>
+      <div class="chart-card-title">Historial de pedidos por estado &mdash; Últimos 6 meses</div>
+      <div class="chart-card-subtitle">Estados del CHECK constraint: <code class="text-[#00E5FF]">pendiente &rarr; confirmado &rarr; en_preparación &rarr; enviado &rarr; entregado</code> o <code class="text-[#FF4D6D]">cancelado</code>.</div>
+      <canvas id="chart-estados" height="180"></canvas>
+    </div>
+
+  </div>
+
+  <div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-16"></div>
+
+  <div class="mb-12 flex flex-col items-center justify-center text-center">
+    <div class="inline-flex items-center px-3 py-1 bg-[#111118]/60 backdrop-blur-md border border-white/10 mb-6 group cursor-default font-mono text-[10px] text-[#E8FF00] tracking-widest uppercase">⬡ Modelo Relacional Interactivo</div>
+    <h3 class="text-4xl md:text-6xl font-headline font-black tracking-tighter text-[#F0F0F8] mb-4 uppercase">MAPA DE RELACIONES FK</h3>
+    <p class="text-[#7A7A95] max-w-2xl font-mono text-sm leading-relaxed">
+      Diagrama interactivo que muestra las <strong>21 tablas</strong> de la base de datos conectadas por sus <strong>28 relaciones</strong> (claves foráneas). 
+      Cada color agrupa un módulo del sistema (ventas, inventario, logística, etc.). Los nodos más grandes son las tablas con más conexiones.
+      <br><strong>Hover</strong> sobre un nodo para ver sus columnas y vínculos. <strong>Scroll</strong> para acercar/alejar. <strong>Arrastrá</strong> los nodos para explorar el modelo.
+    </p>
+  </div>
+
+  <!-- Barra de stats del grafo -->
+  <div class="d3-stats-bar reveal">
+    <div class="d3-stat-item">
+      <span class="d3-stat-num">21</span>
+      <span class="d3-stat-lbl">Tablas</span>
+    </div>
+    <div class="d3-stat-sep"></div>
+    <div class="d3-stat-item">
+      <span class="d3-stat-num">28</span>
+      <span class="d3-stat-lbl">Relaciones FK</span>
+    </div>
+    <div class="d3-stat-sep"></div>
+    <div class="d3-stat-item">
+      <span class="d3-stat-num">7</span>
+      <span class="d3-stat-lbl">Módulos</span>
+    </div>
+    <div class="d3-stat-sep"></div>
+    <div class="d3-stat-item">
+      <span class="d3-stat-num text-[#E8FF00]">productos</span>
+      <span class="d3-stat-lbl">Hub principal (×8 FK)</span>
+    </div>
+  </div>
+
+  <div id="d3-graph" class="d3-container reveal"></div>
+
+</section>
+
+<div class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-16"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>NEXO</span>SPORT</div>
+  <div class="footer-meta">
+    Base de Datos Relacionales · EGI · ITU Mendoza · 2025B<br>
+    Tecnicatura en Desarrollo de Software<br>
+    Integrantes: Alejandro Díaz · Josué Aguirre · Leonardo Milow · Mateo Luján · Rocío Avezon
+  </div>
+  <div class="footer-badge">IRONDEV'S · 2025–2026</div>
+</footer>
+
+<!-- 3. Lenis (smooth scroll — va primero, antes de GSAP) -->
+<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+
+<!-- 4. GSAP Core -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<!-- 5. GSAP ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<!-- 6. Splitting.js (animación de texto por letra) -->
+<script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
+
+<!-- 7. Typed.js (typewriter) -->
+<script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+
+<!-- 8. CountUp.js (contadores animados) -->
+<script src="https://unpkg.com/countup.js@2.8.0/dist/countUp.umd.js"></script>
+
+<!-- 9. Chart.js (charts de la BD) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- 10. D3.js (grafo de FK) -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<!-- 11. Prism.js JS (syntax highlight — va después de D3) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+
+<!-- 12. Archivos propios — siempre al final -->
+<script src="assets/js/main.js" defer></script>
+<script src="assets/js/gsap-animations.js" defer></script>
+<script src="assets/js/transitions.js" defer></script>
+<script src="assets/js/cursor.js" defer></script>
+<script src="assets/js/sql-features.js" defer></script>
+<script src="assets/js/er-diagram.js" defer></script>
+<script src="assets/js/charts.js" defer></script>
+<script src="assets/js/d3-graph.js" defer></script>
+</body>
+</html>
+
+
+
+
+
+
+
