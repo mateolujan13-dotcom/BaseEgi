@@ -225,21 +225,4 @@ document.addEventListener('DOMContentLoaded', () => {
   
   container.innerHTML = gridHtml;
 });
-// STITCH CODE VIEWER TOGGLE
-window.toggleCard = function(cardElement) {
-  const content = cardElement.querySelector('.code-body-content');
-  const icon = cardElement.querySelector('.chevron-icon');
-  const isCollapsed = cardElement.getAttribute('data-state') === 'collapsed';
 
-  if (isCollapsed) {
-      content.classList.remove('hidden');
-      icon.style.transform = 'rotate(180deg)';
-      cardElement.setAttribute('data-state', 'expanded');
-      cardElement.classList.add('border-[#E8FF00]/50');
-  } else {
-      content.classList.add('hidden');
-      icon.style.transform = 'rotate(0deg)';
-      cardElement.setAttribute('data-state', 'collapsed');
-      cardElement.classList.remove('border-[#E8FF00]/50');
-  }
-};

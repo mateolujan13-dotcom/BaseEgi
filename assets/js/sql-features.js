@@ -3,8 +3,9 @@
 function initCopyButtons() {
   document.querySelectorAll('.glass-card').forEach(card => {
     if (!card.querySelector('code')) return;
-    const header = card.querySelector('.flex.items-center.justify-between.p-6');
-    if (!header) return;
+    const chevron = card.querySelector('.chevron-icon');
+    if (!chevron) return;
+    const rightSide = chevron.parentNode;
     const btn = document.createElement('button');
     btn.className = 'copy-btn';
     btn.innerHTML = '<span class="copy-icon">⎘</span> Copiar';
@@ -19,11 +20,10 @@ function initCopyButtons() {
       fontSize: '0.7rem',
       fontWeight: '600',
       transition: 'all 0.2s',
-      marginLeft: 'auto',
       flexShrink: '0'
     });
 
-    header.appendChild(btn);
+    rightSide.insertBefore(btn, chevron);
 
     btn.addEventListener('click', async (e) => {
       e.stopPropagation();
@@ -94,7 +94,9 @@ function initDMLFilters() {
 
 function initCodeCardToggles() {
   document.querySelectorAll('.glass-card').forEach(card => {
-    card.addEventListener('click', (e) => {
+    const header = card.children[0];
+    if (!header) return;
+    header.addEventListener('click', (e) => {
       if (e.target.closest('.copy-btn')) return;
       const body = card.querySelector('.code-body-content');
       if (!body) return;
