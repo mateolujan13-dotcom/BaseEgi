@@ -139,7 +139,7 @@ function initCounters() {
     once: true,
     onEnter: () => {
       if (document.getElementById('counter-tablas')) {
-        new countUp.CountUp('counter-tablas', 21, options).start();
+        new countUp.CountUp('counter-tablas', 23, options).start();
       }
       if (document.getElementById('counter-vistas')) {
         new countUp.CountUp('counter-vistas', 5, options).start();
