@@ -357,7 +357,7 @@ function restoreView() {
   isolatedNode = null;
   isolateBtn.classList.remove('show');
   node.selectAll('circle, text').attr('opacity', 1);
-  link.attr('stroke', 'rgba(0,229,255,0.18)').attr('stroke-width', 1.2);
+  link.attr('opacity', 1).attr('stroke', 'rgba(0,229,255,0.18)').attr('stroke-width', 1.2);
   node.selectAll('circle').attr('stroke-opacity', 1);
 }
 
