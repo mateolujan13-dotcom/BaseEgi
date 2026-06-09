@@ -37,8 +37,18 @@ function initD3Graph() {
   function closeSidebar() {
     sidebar.classList.remove('open');
     selectedNode = null;
-    node.selectAll('circle').attr('opacity', 1);
     link.attr('stroke', 'rgba(0,229,255,0.18)').attr('stroke-width', 1.2);
+    if (isolatedNode) {
+      const nid = isolatedNode;
+      const nbrs = new Set([nid]);
+      links.forEach(l => {
+        if (l.source.id === nid) nbrs.add(l.target.id);
+        if (l.target.id === nid) nbrs.add(l.source.id);
+      });
+      node.selectAll('circle').attr('opacity', n => nbrs.has(n.id) ? 1 : 0.12);
+    } else {
+      node.selectAll('circle').attr('opacity', 1);
+    }
   }
 
   // ── LEYENDA ──
@@ -247,7 +257,25 @@ function initD3Graph() {
   })
   .on('mouseleave', function() {
     tooltip.style.opacity = '0';
-    if (selectedNode || isolatedNode) return;
+    if (isolatedNode) {
+      const nid = isolatedNode;
+      const nbrs = new Set([nid]);
+      links.forEach(l => {
+        if (l.source.id === nid) nbrs.add(l.target.id);
+        if (l.target.id === nid) nbrs.add(l.source.id);
+      });
+      node.selectAll('circle').attr('opacity', n => nbrs.has(n.id) ? 1 : 0.12);
+      node.selectAll('circle').attr('stroke-opacity', n => nbrs.has(n.id) ? 1 : 0.12);
+      node.selectAll('text').attr('opacity', n => nbrs.has(n.id) ? 1 : 0.1);
+      link.attr('opacity', l =>
+        (nbrs.has(l.source.id) && nbrs.has(l.target.id)) ? 1 : 0.06
+      );
+      return;
+    }
+    if (selectedNode) {
+      node.selectAll('circle').attr('opacity', n => n.id === selectedNode ? 1 : 0.3);
+      return;
+    }
     link.attr('stroke', 'rgba(0,229,255,0.18)').attr('stroke-width', 1.2);
     node.selectAll('circle').attr('opacity', 1);
   });

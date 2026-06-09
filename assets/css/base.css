@@ -59,7 +59,7 @@
   border-radius: 4px;
   font-family: 'Inter', sans-serif;
   z-index: 100;
-  transition: opacity 0.2s, top 0.1s, left 0.1s;
+  transition: opacity 0.2s;
   min-width: 200px;
 }
 .d3-tooltip-name { color: var(--accent); font-weight: 700; margin-bottom: 4px; font-size: 0.8rem; }
