@@ -20,6 +20,27 @@ function initD3Graph() {
   tooltip.style.opacity = '0';
   wrapper.appendChild(tooltip);
 
+  // ── SIDEBAR (click detail panel) ──
+  const sidebar = document.createElement('div');
+  sidebar.className = 'd3-sidebar';
+  wrapper.appendChild(sidebar);
+
+  // ── ISOLATE button ──
+  const isolateBtn = document.createElement('button');
+  isolateBtn.className = 'd3-isolate-btn';
+  isolateBtn.textContent = '← Restaurar vista';
+  wrapper.appendChild(isolateBtn);
+
+  let selectedNode = null;
+  let isolatedNode = null;
+
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    selectedNode = null;
+    node.selectAll('circle').attr('opacity', 1);
+    link.attr('stroke', 'rgba(0,229,255,0.18)').attr('stroke-width', 1.2);
+  }
+
   // ── LEYENDA ──
   const legend = document.createElement('div');
   legend.className = 'd3-graph-legend';
@@ -32,7 +53,7 @@ function initD3Graph() {
   // ── HINT ──
   const hint = document.createElement('div');
   hint.className = 'd3-graph-hint';
-  hint.textContent = '⊕ Scroll para zoom · Arrastrá nodos · Hover para info';
+  hint.textContent = '⊕ Scroll para zoom · Arrastrá nodos · Click para info · Doble click para aislar';
   wrapper.appendChild(hint);
 
   // ── SVG ──
@@ -229,6 +250,116 @@ function initD3Graph() {
     node.selectAll('circle').attr('opacity', 1);
     tooltip.style.opacity = '0';
   });
+
+  // ── Click: sidebar ──
+  node.on('click', function(event, d) {
+    event.stopPropagation();
+    if (selectedNode === d.id) { closeSidebar(); return; }
+    selectedNode = d.id;
+    renderSidebar(d);
+    node.selectAll('circle').attr('opacity', n => n.id === d.id ? 1 : 0.3);
+    link.attr('stroke', l =>
+      (l.source.id === d.id || l.target.id === d.id) ? nodeColor(d) : 'rgba(0,229,255,0.06)'
+    ).attr('stroke-width', l =>
+      (l.source.id === d.id || l.target.id === d.id) ? 2.5 : 0.8
+    );
+  });
+
+  // ── Double-click: isolate ──
+  node.on('dblclick', function(event, d) {
+    event.stopPropagation();
+    closeSidebar();
+    isolatedNode = d.id;
+    const neighborIds = new Set();
+    neighborIds.add(d.id);
+    links.forEach(l => {
+      if (l.source.id === d.id) neighborIds.add(l.target.id);
+      if (l.target.id === d.id) neighborIds.add(l.source.id);
+    });
+    node.selectAll('circle').attr('opacity', n => neighborIds.has(n.id) ? 1 : 0.12);
+    node.selectAll('circle').attr('stroke-opacity', n => neighborIds.has(n.id) ? 1 : 0.12);
+    node.selectAll('text').attr('opacity', n => neighborIds.has(n.id) ? 1 : 0.1);
+    link.attr('opacity', l =>
+      (neighborIds.has(l.source.id) && neighborIds.has(l.target.id)) ? 1 : 0.06
+    );
+    isolateBtn.classList.add('show');
+  });
+
+  // ── Click en fondo: cerrar sidebar o restaurar vista ──
+  svg.on('click', function() {
+    if (isolatedNode) { restoreView(); }
+    else if (selectedNode) { closeSidebar(); }
+  });
+
+  // ── Isolate button handler ──
+  isolateBtn.addEventListener('click', restoreView);
+
+function renderSidebar(d) {
+  const col = nodeColor(d);
+  const fks = links.filter(l => l.source.id === d.id || l.target.id === d.id);
+  const outgoing = fks.filter(l => l.source.id === d.id);
+  const incoming = fks.filter(l => l.target.id === d.id);
+  const tableDef = DB_TABLES.find(t => t.name === d.id);
+
+  function typeBadge(type) {
+    const cls = type.includes('PK') ? 'text-[#E8FF00] border-[#E8FF00]/20 bg-[#E8FF00]/10'
+      : type.includes('FK') ? 'text-[#00E5FF] border-[#00E5FF]/20 bg-[#00E5FF]/10'
+      : type.includes('CHECK') ? 'text-[#FF4D6D] border-[#FF4D6D]/20 bg-[#FF4D6D]/10'
+      : type.includes('INT') || type.includes('DECIMAL') ? 'text-[#FF8A00] border-[#FF8A00]/20 bg-[#FF8A00]/10'
+      : type.includes('UNIQUE') ? 'text-[#B794F4] border-[#B794F4]/20 bg-[#B794F4]/10'
+      : 'text-[#00FF66] border-[#00FF66]/20 bg-[#00FF66]/10';
+    return `<span class="d3-sidebar-col-type ${cls}">${type}</span>`;
+  }
+
+  sidebar.innerHTML = `
+    <button class="d3-sidebar-close">✕</button>
+    <div class="d3-sidebar-header">
+      <div class="d3-sidebar-name" style="color:${col}">${d.id}</div>
+      <div class="d3-sidebar-module" style="color:${col}">${MODULES[d.mod]?.label || d.mod}</div>
+      <div class="d3-sidebar-degree">${degree[d.id]} conexiones FK</div>
+    </div>
+    <div class="d3-sidebar-section">
+      <div class="d3-sidebar-section-title">Columnas</div>
+      ${(tableDef ? tableDef.cols : d.cols).map(c => {
+        const name = typeof c === 'string' ? c : c.n;
+        const type = typeof c === 'string' ? '' : c.t;
+        return `<div class="d3-sidebar-col">
+          <span class="d3-sidebar-col-name">${name}</span>
+          ${type ? typeBadge(type) : ''}
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="d3-sidebar-section">
+      <div class="d3-sidebar-section-title">Relaciones salientes (${outgoing.length})</div>
+      ${outgoing.length ? outgoing.map(l =>
+        `<div class="d3-sidebar-rel">
+          <span class="d3-sidebar-rel-arrow">→</span>
+          <span class="d3-sidebar-rel-target">${l.target.id}</span>
+        </div>`
+      ).join('') : '<div style="font-size:0.7rem;color:#7A7A95">Ninguna</div>'}
+    </div>
+    <div class="d3-sidebar-section">
+      <div class="d3-sidebar-section-title">Relaciones entrantes (${incoming.length})</div>
+      ${incoming.length ? incoming.map(l =>
+        `<div class="d3-sidebar-rel">
+          <span class="d3-sidebar-rel-arrow">←</span>
+          <span class="d3-sidebar-rel-target">${l.source.id}</span>
+        </div>`
+      ).join('') : '<div style="font-size:0.7rem;color:#7A7A95">Ninguna</div>'}
+    </div>
+  `;
+
+  sidebar.querySelector('.d3-sidebar-close').addEventListener('click', closeSidebar);
+  sidebar.classList.add('open');
+}
+
+function restoreView() {
+  isolatedNode = null;
+  isolateBtn.classList.remove('show');
+  node.selectAll('circle, text').attr('opacity', 1);
+  link.attr('stroke', 'rgba(0,229,255,0.18)').attr('stroke-width', 1.2);
+  node.selectAll('circle').attr('stroke-opacity', 1);
+}
 
   // ── Tick ──
   simulation.on('tick', () => {
