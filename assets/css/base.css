@@ -334,3 +334,13 @@ code[class*="language-"] {
 }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
+
+/* --- GLASS CARD hover (reemplaza tilt3D) --- */
+.glass-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px rgba(232,255,0,0.08);
+  border-color: rgba(232,255,0,0.35);
+}

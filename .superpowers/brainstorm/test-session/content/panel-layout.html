@@ -1,0 +1,38 @@
+<h2>Panel de información — ¿qué layout preferís?</h2>
+<p class="subtitle">Al hacer click en una tabla del grafo, se abre un panel con detalles. Dos opciones:</p>
+
+<div class="options">
+  <div class="option" data-choice="sidebar" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Panel lateral (sidebar)</h3>
+      <p>Se abre un panel fijo a la derecha del grafo. Muestra: nombre de tabla, módulo, todas las columnas con su tipo (PK/FK destacadas), relaciones FK entrantes y salientes, y botón para cerrar. El grafo se reajusta al ancho restante.</p>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><h4>Pros</h4><ul><li>Información siempre visible mientras explorás</li><li>Podés hacer click en varias tablas y comparar</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Ocupa espacio horizontal en pantallas angostas</li></ul></div>
+      </div>
+    </div>
+  </div>
+  <div class="option" data-choice="modal" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Modal flotante (popup)</h3>
+      <p>Aparece una tarjeta flotante centrada (o cerca del nodo clickeado) con la misma info. Se cierra al hacer click fuera o al presionar Escape.</p>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><h4>Pros</h4><ul><li>No modifica el layout del grafo</li><li>Funciona bien en cualquier tamaño de pantalla</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Tapa parte del grafo</li><li>No podés ver dos tablas a la vez</li></ul></div>
+      </div>
+    </div>
+  </div>
+  <div class="option" data-choice="overlay-tooltip" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Tooltip expandido mejorado</h3>
+      <p>El tooltip actual se expande al hacer click, mostrando toda la info (columnas completas, relaciones) en una tarjeta más grande anclada al nodo. Se cierra con click fuera.</p>
+      <div class="pros-cons" style="margin-top:8px">
+        <div class="pros"><h4>Pros</h4><ul><li>Mínimo cambio respecto a lo actual</li><li>No requiere reestructurar el layout</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Menos espacio para información detallada</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>
