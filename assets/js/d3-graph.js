@@ -2,7 +2,7 @@
 
 function initD3Graph() {
   const wrapper = document.getElementById('d3-graph');
-  if (!wrapper || typeof DB_MODULES === 'undefined' || typeof DB_NODES === 'undefined' || typeof DB_LINKS === 'undefined') return;
+  if (!wrapper || typeof DB_MODULES === 'undefined' || typeof DB_NODES === 'undefined' || typeof DB_LINKS === 'undefined' || typeof DB_TABLES === 'undefined') return;
 
   const W = wrapper.clientWidth || 900;
   const H = 640;
@@ -246,9 +246,10 @@ function initD3Graph() {
     tooltip.style.top  = ty + 'px';
   })
   .on('mouseleave', function() {
+    tooltip.style.opacity = '0';
+    if (selectedNode || isolatedNode) return;
     link.attr('stroke', 'rgba(0,229,255,0.18)').attr('stroke-width', 1.2);
     node.selectAll('circle').attr('opacity', 1);
-    tooltip.style.opacity = '0';
   });
 
   // ── Click: sidebar ──
@@ -320,7 +321,7 @@ function renderSidebar(d) {
     </div>
     <div class="d3-sidebar-section">
       <div class="d3-sidebar-section-title">Columnas</div>
-      ${(tableDef ? tableDef.cols : d.cols).map(c => {
+      ${(tableDef ? tableDef.cols : (d.cols || [])).map(c => {
         const name = typeof c === 'string' ? c : c.n;
         const type = typeof c === 'string' ? '' : c.t;
         return `<div class="d3-sidebar-col">
