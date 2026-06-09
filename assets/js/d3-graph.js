@@ -2,80 +2,14 @@
 
 function initD3Graph() {
   const wrapper = document.getElementById('d3-graph');
-  if (!wrapper) return;
+  if (!wrapper || typeof DB_MODULES === 'undefined' || typeof DB_NODES === 'undefined' || typeof DB_LINKS === 'undefined') return;
 
   const W = wrapper.clientWidth || 900;
   const H = 640;
 
-  // ── MÓDULOS y colores ──
-  const MODULES = {
-    'usuarios_roles':  { label: 'Usuarios & Roles',    color: '#E8FF00' },
-    'catalogo':        { label: 'Catálogo',             color: '#00E5FF' },
-    'inventario':      { label: 'Inventario',           color: '#FFB347' },
-    'pedidos':         { label: 'Pedidos & Pagos',      color: '#00E096' },
-    'logistica':       { label: 'Logística',            color: '#FF4D6D' },
-    'mayoristas':      { label: 'Mayoristas & CRM',     color: '#B794F4' },
-    'carrito':         { label: 'Carrito & Cupones',    color: '#F6AD55' },
-  };
-
-  // ── NODOS con info de columnas clave y módulo ──
-  const nodes = [
-    { id: 'roles',              mod: 'usuarios_roles', cols: ['id_rol PK', 'nombre', 'descripcion'] },
-    { id: 'usuarios',           mod: 'usuarios_roles', cols: ['id_usuario PK', 'email UNIQUE', 'id_rol FK', 'estado CHECK'] },
-    { id: 'clientes',           mod: 'mayoristas',     cols: ['id_cliente PK FK', 'tipo_cliente CHECK', 'cuit', 'limite_credito'] },
-    { id: 'vendedores',         mod: 'usuarios_roles', cols: ['id_vendedor PK FK', 'sucursal', 'comision'] },
-    { id: 'administradores',    mod: 'usuarios_roles', cols: ['id_admin PK FK', 'nivel_acceso CHECK'] },
-    { id: 'categorias',         mod: 'catalogo',       cols: ['id_categoria PK', 'nombre UNIQUE', 'activo BOOL'] },
-    { id: 'proveedores',        mod: 'catalogo',       cols: ['id_proveedor PK', 'nombre', 'cuit', 'estado CHECK'] },
-    { id: 'productos',          mod: 'catalogo',       cols: ['id_producto PK', 'precio_base', 'id_categoria FK', 'id_proveedor FK', 'estado CHECK'] },
-    { id: 'inventario',         mod: 'inventario',     cols: ['id_inventario PK', 'id_producto FK UNIQUE', 'stock_actual ≥0', 'stock_minimo'] },
-    { id: 'movimientos_stock',  mod: 'inventario',     cols: ['id_movimiento PK', 'tipo_movimiento CHECK', 'stock_anterior', 'stock_posterior'] },
-    { id: 'pedidos',            mod: 'pedidos',        cols: ['id_pedido PK', 'numero_pedido UNIQUE', 'estado CHECK', 'total DECIMAL', 'id_cliente FK', 'id_vendedor FK'] },
-    { id: 'detalle_pedido',     mod: 'pedidos',        cols: ['id_detalle PK', 'id_pedido FK', 'id_producto FK', 'cantidad >0', 'subtotal'] },
-    { id: 'pagos',              mod: 'pedidos',        cols: ['id_pago PK', 'id_pedido FK', 'id_metodo FK', 'monto', 'estado CHECK', 'datos_extra JSON'] },
-    { id: 'metodos_pago',       mod: 'pedidos',        cols: ['id_metodo PK', 'nombre UNIQUE', 'activo BOOL'] },
-    { id: 'carritos',           mod: 'carrito',        cols: ['id_carrito PK', 'id_usuario FK', 'estado CHECK'] },
-    { id: 'items_carrito',      mod: 'carrito',        cols: ['id_item PK', 'id_carrito FK', 'id_producto FK', 'cantidad >0'] },
-    { id: 'cupones_descuento',  mod: 'carrito',        cols: ['id_cupon PK', 'codigo_promocional UNIQUE', 'porcentaje CHECK', 'fecha_vencimiento'] },
-    { id: 'uso_cupones',        mod: 'carrito',        cols: ['id_uso PK', 'id_cupon FK', 'id_pedido FK', 'id_cliente FK'] },
-    { id: 'opiniones',          mod: 'catalogo',       cols: ['id_opinion PK', 'calificacion 1–5', 'id_producto FK', 'id_usuario FK UNIQUE'] },
-    { id: 'empresas_transporte',mod: 'logistica',      cols: ['id_empresa PK', 'nombre UNIQUE', 'estado CHECK'] },
-    { id: 'seguimiento_envios', mod: 'logistica',      cols: ['id_seguimiento PK', 'id_pedido FK', 'id_empresa FK', 'codigo_tracking UNIQUE', 'estado_envio CHECK'] },
-    { id: 'cuenta_corriente',   mod: 'mayoristas',     cols: ['id_movimiento PK', 'id_cliente FK', 'tipo_movimiento CHECK', 'saldo_anterior', 'saldo_posterior'] },
-    { id: 'precios_por_tipo',   mod: 'mayoristas',     cols: ['id_precio PK', 'id_producto FK', 'tipo_cliente CHECK', 'precio', 'cantidad_minima'] },
-  ];
-
-  // ── LINKS (FK reales) ──
-  const links = [
-    { source: 'roles', target: 'usuarios' },
-    { source: 'usuarios', target: 'clientes' },
-    { source: 'usuarios', target: 'vendedores' },
-    { source: 'usuarios', target: 'administradores' },
-    { source: 'usuarios', target: 'movimientos_stock' },
-    { source: 'usuarios', target: 'carritos' },
-    { source: 'usuarios', target: 'opiniones' },
-    { source: 'clientes', target: 'pedidos' },
-    { source: 'clientes', target: 'cuenta_corriente' },
-    { source: 'clientes', target: 'uso_cupones' },
-    { source: 'vendedores', target: 'pedidos' },
-    { source: 'categorias', target: 'productos' },
-    { source: 'proveedores', target: 'productos' },
-    { source: 'productos', target: 'inventario' },
-    { source: 'productos', target: 'detalle_pedido' },
-    { source: 'productos', target: 'movimientos_stock' },
-    { source: 'productos', target: 'items_carrito' },
-    { source: 'productos', target: 'opiniones' },
-    { source: 'productos', target: 'precios_por_tipo' },
-    { source: 'pedidos', target: 'detalle_pedido' },
-    { source: 'pedidos', target: 'pagos' },
-    { source: 'pedidos', target: 'seguimiento_envios' },
-    { source: 'pedidos', target: 'uso_cupones' },
-    { source: 'metodos_pago', target: 'pagos' },
-    { source: 'carritos', target: 'items_carrito' },
-    { source: 'cupones_descuento', target: 'uso_cupones' },
-    { source: 'empresas_transporte', target: 'seguimiento_envios' },
-    { source: 'inventario', target: 'movimientos_stock' },
-  ];
+  const MODULES = DB_MODULES;
+  const nodes = DB_NODES;
+  const links = DB_LINKS;
 
   // ── Mapa de color por módulo ──
   const nodeColor = d => MODULES[d.mod]?.color || '#7A7A95';

@@ -1,6 +1,7 @@
 // cursor.js — Cursor personalizado desktop
 
 function initCursor() {
+  if (!window.matchMedia('(pointer: fine)').matches) return;
   const cursor = document.createElement('div');
   cursor.id = 'custom-cursor';
   document.body.appendChild(cursor);

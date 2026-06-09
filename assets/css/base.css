@@ -281,6 +281,16 @@ code[class*="language-"] {
 .token.symbol { color: #61afef; }
 .token.url { color: #56b6c2; }
 
+/* --- SYNTAX HIGHLIGHTING: clases manuales (HTML ya generado con spans) --- */
+.kw  { color: #c678dd; }
+.fn  { color: #61afef; }
+.op  { color: #56b6c2; }
+.str { color: #98c379; }
+.nm  { color: #d19a66; }
+.dt  { color: #e5c07b; }
+.cm  { color: #5c6370; font-style: italic; }
+
+
 /* --- CODE TAGS --- */
 .code-tag {
   font-size: 9px;

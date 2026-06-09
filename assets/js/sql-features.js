@@ -65,33 +65,6 @@ function initCopyButtons() {
   });
 }
 
-function initDMLFilters() {
-  const filterBtns = document.querySelectorAll('.tab-btn');
-  const cards = document.querySelectorAll('.glass-card');
-  if (!filterBtns.length || !cards.length) return;
-
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const targetId = btn.dataset.tab;
-      cards.forEach(card => {
-        const inPanel = card.closest('.tab-panel');
-        const show = !targetId || (inPanel && inPanel.id === targetId) || !inPanel;
-        if (typeof gsap !== 'undefined') {
-          gsap.to(card, {
-            opacity: show ? 1 : 0.15,
-            scale: show ? 1 : 0.97,
-            duration: 0.3,
-            ease: 'Power2.out'
-          });
-        }
-        card.style.pointerEvents = show ? 'all' : 'none';
-      });
-    });
-  });
-}
-
 function initCodeCardToggles() {
   document.querySelectorAll('.glass-card').forEach(card => {
     const header = card.children[0];

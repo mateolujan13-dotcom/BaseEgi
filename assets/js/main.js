@@ -1,6 +1,42 @@
 // main.js — punto de entrada, inicializa todo en orden
 
+function initSchemaGrid() {
+  const container = document.getElementById('schema-grid-container');
+  if (!container || typeof DB_TABLES === 'undefined') return;
+
+  function getColorClass(type) {
+    if (type.includes('PK')) return 'text-[#E8FF00] border-[#E8FF00]/20 bg-[#E8FF00]/10';
+    if (type.includes('FK')) return 'text-[#00E5FF] border-[#00E5FF]/20 bg-[#00E5FF]/10';
+    if (type.includes('INT') || type.includes('DECIMAL')) return 'text-[#FF8A00] border-[#FF8A00]/20 bg-[#FF8A00]/10';
+    return 'text-[#00FF66] border-[#00FF66]/20 bg-[#00FF66]/10';
+  }
+
+  const gridHtml = DB_TABLES.map(table => `
+    <div class="bg-[#111118]/80 border border-white/10 p-4 transition-all duration-300 hover:bg-white/5 hover:backdrop-blur-sm hover:border-[#E8FF00]/40 group rounded-md">
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#00E5FF]"></span>
+                <h3 class="font-mono text-sm text-[#E8FF00] font-bold">${table.name}</h3>
+            </div>
+        </div>
+        <div class="space-y-2">
+            ${table.cols.map(col => `
+                <div class="flex items-center justify-between py-1 border-b border-white/5 last:border-0 group/col">
+                    <span class="font-mono text-[11px] text-[#F0F0F8] group-hover/col:text-[#00E5FF] transition-colors">${col.n}</span>
+                    <span class="text-[9px] font-mono px-1.5 py-0.5 rounded-sm border ${getColorClass(col.t)}">${col.t}</span>
+                </div>
+            `).join('')}
+        </div>
+    </div>
+  `).join('');
+
+  container.innerHTML = gridHtml;
+}
+
 window.addEventListener('load', () => {
+  // 0. Schema grid (antes que ScrollTrigger para evitar race condition)
+  initSchemaGrid();
+
   // 1. Verificar dependencias críticas
   const checks = {
     gsap: typeof gsap !== 'undefined',
@@ -26,7 +62,6 @@ window.addEventListener('load', () => {
     if (typeof initRevealAnimations === 'function') initRevealAnimations();
     if (typeof initHeroParallax === 'function') initHeroParallax();
   } else {
-    // Fallback CSS puro
     document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
   }
 
@@ -166,63 +201,5 @@ function initTypewriter() {
   });
 }
 
-// STITCH BENTO GRID GENERATOR
-document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('schema-grid-container');
-  if (!container) return;
 
-  const dbTables = [
-    { name: 'roles', cols: [{n:'id_rol', t:'PK INT'}, {n:'nombre', t:'VARCHAR'}, {n:'descripcion', t:'TEXT'}, {n:'fecha_creacion', t:'TS'}] },
-    { name: 'usuarios', cols: [{n:'id_usuario', t:'PK INT'}, {n:'nombre / apellido', t:'VARCHAR'}, {n:'email', t:'UNIQUE'}, {n:'password', t:'VARCHAR'}, {n:'telefono', t:'VARCHAR'}, {n:'id_rol', t:'FK INT'}, {n:'estado', t:'CHECK'}] },
-    { name: 'clientes', cols: [{n:'id_cliente', t:'PK FK'}, {n:'tipo_cliente', t:'CHECK'}, {n:'cuit', t:'VARCHAR'}, {n:'limite_credito', t:'DECIMAL'}] },
-    { name: 'vendedores', cols: [{n:'id_vendedor', t:'PK FK'}, {n:'sucursal', t:'VARCHAR'}, {n:'comision', t:'DECIMAL'}] },
-    { name: 'administradores', cols: [{n:'id_admin', t:'PK FK'}, {n:'nivel_acceso', t:'CHECK'}] },
-    { name: 'categorias', cols: [{n:'id_categoria', t:'PK INT'}, {n:'nombre', t:'UNIQUE'}, {n:'descripcion', t:'TEXT'}, {n:'activo', t:'BOOL'}] },
-    { name: 'proveedores', cols: [{n:'id_proveedor', t:'PK INT'}, {n:'nombre', t:'VARCHAR'}, {n:'cuit', t:'VARCHAR'}, {n:'telefono', t:'VARCHAR'}, {n:'email', t:'VARCHAR'}, {n:'direccion', t:'TEXT'}, {n:'estado', t:'CHECK'}] },
-    { name: 'productos', cols: [{n:'id_producto', t:'PK INT'}, {n:'nombre', t:'VARCHAR'}, {n:'descripcion', t:'TEXT'}, {n:'precio_base', t:'DECIMAL'}, {n:'id_categoria', t:'FK INT'}, {n:'id_proveedor', t:'FK INT'}, {n:'estado', t:'CHECK'}] },
-    { name: 'inventario', cols: [{n:'id_inventario', t:'PK INT'}, {n:'id_producto', t:'FK UNIQUE'}, {n:'stock_actual', t:'INT'}, {n:'stock_minimo', t:'INT'}, {n:'ubicacion', t:'VARCHAR'}, {n:'ultima_actualizacion', t:'TS'}] },
-    { name: 'movimientos_stock', cols: [{n:'id_movimiento', t:'PK INT'}, {n:'id_producto', t:'FK INT'}, {n:'id_usuario', t:'FK INT'}, {n:'tipo_movimiento', t:'CHECK'}, {n:'cantidad', t:'INT'}, {n:'stock_anterior', t:'INT'}, {n:'stock_posterior', t:'INT'}, {n:'motivo', t:'VARCHAR'}, {n:'fecha_movimiento', t:'TS'}] },
-    { name: 'pedidos', cols: [{n:'id_pedido', t:'PK INT'}, {n:'numero_pedido', t:'UNIQUE'}, {n:'id_cliente', t:'FK INT'}, {n:'id_vendedor', t:'FK INT'}, {n:'fecha_pedido', t:'TS'}, {n:'estado', t:'CHECK'}, {n:'total', t:'DECIMAL'}, {n:'direccion_envio', t:'TEXT'}] },
-    { name: 'detalle_pedido', cols: [{n:'id_detalle', t:'PK INT'}, {n:'id_pedido', t:'FK INT'}, {n:'id_producto', t:'FK INT'}, {n:'cantidad', t:'INT'}, {n:'precio_unitario', t:'DECIMAL'}, {n:'subtotal', t:'DECIMAL'}] },
-    { name: 'metodos_pago', cols: [{n:'id_metodo', t:'PK INT'}, {n:'nombre', t:'UNIQUE'}, {n:'descripcion', t:'TEXT'}, {n:'activo', t:'BOOL'}] },
-    { name: 'pagos', cols: [{n:'id_pago', t:'PK INT'}, {n:'id_pedido', t:'FK INT'}, {n:'id_metodo', t:'FK INT'}, {n:'monto', t:'DECIMAL'}, {n:'fecha_pago', t:'TS'}, {n:'estado', t:'CHECK'}, {n:'datos_extra', t:'JSON'}] },
-    { name: 'carritos', cols: [{n:'id_carrito', t:'PK INT'}, {n:'id_usuario', t:'FK INT'}, {n:'fecha_creacion', t:'TS'}, {n:'estado', t:'CHECK'}] },
-    { name: 'items_carrito', cols: [{n:'id_item', t:'PK INT'}, {n:'id_carrito', t:'FK INT'}, {n:'id_producto', t:'FK INT'}, {n:'cantidad', t:'INT'}, {n:'precio_unitario', t:'DECIMAL'}] },
-    { name: 'cupones_descuento', cols: [{n:'id_cupon', t:'PK INT'}, {n:'codigo_promocional', t:'UNIQUE'}, {n:'descripcion', t:'TEXT'}, {n:'porcentaje', t:'CHECK'}, {n:'fecha_inicio', t:'DATE'}, {n:'fecha_vencimiento', t:'DATE'}, {n:'activo', t:'BOOL'}] },
-    { name: 'uso_cupones', cols: [{n:'id_uso', t:'PK INT'}, {n:'id_cupon', t:'FK INT'}, {n:'id_pedido', t:'FK INT'}, {n:'id_cliente', t:'FK INT'}, {n:'fecha_uso', t:'TS'}] },
-    { name: 'opiniones', cols: [{n:'id_opinion', t:'PK INT'}, {n:'id_producto', t:'FK INT'}, {n:'id_usuario', t:'FK INT'}, {n:'calificacion', t:'INT'}, {n:'comentario', t:'TEXT'}, {n:'fecha_opinion', t:'TS'}] },
-    { name: 'empresas_transporte', cols: [{n:'id_empresa', t:'PK INT'}, {n:'nombre', t:'UNIQUE'}, {n:'telefono', t:'VARCHAR'}, {n:'email', t:'VARCHAR'}, {n:'sitio_web', t:'VARCHAR'}, {n:'estado', t:'CHECK'}] },
-    { name: 'seguimiento_envios', cols: [{n:'id_seguimiento', t:'PK INT'}, {n:'id_pedido', t:'FK INT'}, {n:'id_empresa', t:'FK INT'}, {n:'codigo_tracking', t:'UNIQUE'}, {n:'estado_envio', t:'CHECK'}, {n:'fecha_actualizacion', t:'TS'}] },
-    { name: 'cuenta_corriente', cols: [{n:'id_movimiento', t:'PK INT'}, {n:'id_cliente', t:'FK INT'}, {n:'tipo_movimiento', t:'CHECK'}, {n:'monto', t:'DECIMAL'}, {n:'saldo_anterior', t:'DECIMAL'}, {n:'saldo_posterior', t:'DECIMAL'}, {n:'descripcion', t:'TEXT'}, {n:'fecha_movimiento', t:'TS'}] },
-    { name: 'precios_por_tipo', cols: [{n:'id_precio', t:'PK INT'}, {n:'id_producto', t:'FK INT'}, {n:'tipo_cliente', t:'CHECK'}, {n:'precio', t:'DECIMAL'}, {n:'cantidad_minima', t:'INT'}] }
-  ];
-
-  function getColorClass(type) {
-    if (type.includes('PK')) return 'text-[#E8FF00] border-[#E8FF00]/20 bg-[#E8FF00]/10';
-    if (type.includes('FK')) return 'text-[#00E5FF] border-[#00E5FF]/20 bg-[#00E5FF]/10';
-    if (type.includes('INT') || type.includes('DECIMAL')) return 'text-[#FF8A00] border-[#FF8A00]/20 bg-[#FF8A00]/10';
-    return 'text-[#00FF66] border-[#00FF66]/20 bg-[#00FF66]/10';
-  }
-
-  const gridHtml = dbTables.map(table => `
-    <div class="bg-[#111118]/80 border border-white/10 p-4 transition-all duration-300 hover:bg-white/5 hover:backdrop-blur-sm hover:border-[#E8FF00]/40 group rounded-md">
-        <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center gap-2">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#00E5FF]"></span>
-                <h3 class="font-mono text-sm text-[#E8FF00] font-bold">${table.name}</h3>
-            </div>
-        </div>
-        <div class="space-y-2">
-            ${table.cols.map(col => `
-                <div class="flex items-center justify-between py-1 border-b border-white/5 last:border-0 group/col">
-                    <span class="font-mono text-[11px] text-[#F0F0F8] group-hover/col:text-[#00E5FF] transition-colors">${col.n}</span>
-                    <span class="text-[9px] font-mono px-1.5 py-0.5 rounded-sm border ${getColorClass(col.t)}">${col.t}</span>
-                </div>
-            `).join('')}
-        </div>
-    </div>
-  `).join('');
-  
-  container.innerHTML = gridHtml;
-});
 
